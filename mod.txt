@@ -21,7 +21,6 @@
 			"hook_id" : "lib/units/weapons/raycastweaponbase",
 			"script_path" : "laser_player_weapon.lua"
 		}
-
 	],
 	"updates" : [
 		{

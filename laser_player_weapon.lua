@@ -9,74 +9,10 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 
 -- hidden settings not found in user-accessible settings menu
 
-
-
---******************************************************************
-
-	Lasers.LuaNetID = "nncpl"
-	--"new networked custom player lasers"
-	--borderline absurd acronym in order to keep it unlikely for another mod to share its id
-
-	Lasers.LegacyID = "gmcpwl"
-	--legacy support for the 0.00000002% of players still using GoonMod somehow
-
-	Lasers.LuaNetID_gradient = "nncpl_gr_v1" 
-	--"new networked custom player lasers- gradient - version one"
-	--for advanced users- creates a gradient between two or more colors. 
-
-	Lasers.DefaultOpacity = 0.2
-	--default opacity for lasers
-
-	Lasers.update_interval = 1
-	--default rate of update on lasers. lower looks better. greatly affects performance! set to 0 for maximum performance (unlimited)
-
-	Lasers.default_gradient_speed = 20
-	--rate of laser change between color locations- higher is faster. no additional effect on performance.
-
-	Lasers.lowquality_gradients = false
-	--local option, does not affect what others see. instant switch instead of slow gradients
-
-	Lasers.debugLogsEnabled = false
-
-	Lasers.generic_color = Color(0,0.2,0):with_alpha(0.4)
-	
-	Lasers.col_white = Color(1,1,1):with_alpha(1)
-	
-	Lasers.last_grad = Color(0,0,0):with_alpha(0)
-
-	Lasers.legacy_clients = Lasers.legacy_clients or {}
-
-	Lasers.SavedTeamColors = Lasers.SavedTeamColors or {}
-
-	Lasers.rainbow = {
-		colors = {
-			[1] = Color(1,1,0):with_alpha(DefaultOpacity),
-			[2] = Color(0,1,1):with_alpha(DefaultOpacity),
-			[3] = Color(1,0,1):with_alpha(DefaultOpacity)
-		},
-		locations = {
-			[1] = 0,
-			[2] = 33,
-			[3] = 66	
-		
-		}
-	}
-	Lasers.example_gradient = Lasers.example_gradient or {
-		colors = {
-			[1] = Color(1,0,0):with_alpha(0.3),
-			[2] = Color(0,1,0):with_alpha(0.3),
-			[3] = Color(0,0,1):with_alpha(0.3)
-		},
-		locations = {
-			[1] = 0,
-			[2] = 33,
-			[3] = 66	
-		
-		}
-	}
-
 	--[[
 	# # NEW: Custom laser gradients ##
+		[Check the README.md for a slightly more in-depth explanation.]
+	
 	* Below, in the table "my_gradient" you can set your own color-changing preset. Lasers are always rendered as a line of one color, not a "true" gradient,
 	however the color can shift over time.
 	* This system uses a system approximately equivalent to the 'color stops' system used by applications or programs such as 
@@ -97,22 +33,92 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 	* Set colors in R/G/B format like shown in "example_gradient."
 	* Set locations, or at what time the gradient displays after the previous one.
 	--]]
+	--todo put my_gradient in settings so it's not overwritten by 
 	Lasers.my_gradient = Lasers.my_gradient or {
 		colors = {
-			[1] = Color(1,0,0.1):with_alpha(0.07),
-			[2] = Color(1,1,0.1):with_alpha(0.07),
-			[3] = Color(0.1,0.1,1):with_alpha(0.07)
+			[1] = Color(1,0,0):with_alpha(0.4),
+			[2] = Color(0,1,0):with_alpha(0.4),
+			[3] = Color(0,0,1):with_alpha(0.4),
+			[4] = Color(1,0,0):with_alpha(0.4)
 		},
 		locations = {
 			[1] = 0,
 			[2] = 33,
-			[3] = 66
+			[3] = 66,
+			[4] = 99
 		}
 		
 	} or Lasers.example_gradient
 
 	--********************************************************************
 
+--******************************************************************
+
+	Lasers.LuaNetID = "nncpl"
+	--"new networked custom player lasers"
+	--borderline absurd acronym in order to keep it unlikely for another mod to share its id
+
+	Lasers.LegacyID = "gmcpwl"
+	--legacy support for the 0.00000002% of players still using GoonMod somehow
+
+	Lasers.LuaNetID_gradient = "nncpl_gr_v1" 
+	--"new networked custom player lasers- gradient - version one"
+	--for advanced users- creates a gradient between two or more colors. 
+
+	Lasers.DefaultOpacity = 0.2
+	--default opacity for lasers
+
+	Lasers.update_interval = 1
+	--default rate of update on lasers. lower looks better. greatly affects performance! set to 0 for maximum performance (unlimited)
+	--currently broken. do not change from 1
+
+	Lasers.default_gradient_speed = 20
+	--rate of laser change between color locations- higher is faster. no additional effect on performance.
+
+	Lasers.lowquality_gradients = false
+	--local option, does not affect what others see. instant switch instead of slow gradients
+
+	Lasers.debugLogsEnabled = true
+
+	Lasers.generic_color = Color(0,0.2,0):with_alpha(0.4)
+	
+	Lasers.col_white = Color(1,1,1):with_alpha(1)
+	
+	Lasers.last_grad = Color(0,0,0):with_alpha(0)
+
+	Lasers.legacy_clients = Lasers.legacy_clients or {}
+
+	Lasers.SavedTeamColors = Lasers.SavedTeamColors or {}
+
+	Lasers.rainbow = {
+		colors = {
+			[1] = Color(1,0,0):with_alpha(DefaultOpacity),
+			[2] = Color(0,1,0):with_alpha(DefaultOpacity),
+			[3] = Color(0,0,1):with_alpha(DefaultOpacity)
+		},
+		locations = {
+			[1] = 0,
+			[2] = 33,
+			[3] = 66	
+		
+		}
+	}
+	Lasers.example_gradient = Lasers.example_gradient or {
+		colors = {
+			[1] = Color(1,0,1):with_alpha(0.3),
+			[2] = Color(0,1,0):with_alpha(0.3),
+			[3] = Color(0,0,1):with_alpha(0.3)
+		},
+		locations = {
+			[1] = 0,
+			[2] = 33,
+			[3] = 66
+		
+		}
+	}
+
+	Lasers.my_gradient = Lasers.my_gradient or Lasers.rainbow
+	
 	Lasers.DefaultTeamColors = Lasers.DefaultTeamColors or {
 		[1] = Color("29ce31"):with_alpha(DefaultOpacity),--Color("00ffdd"),
 		[2] = Color("00eae8"):with_alpha(DefaultOpacity),
@@ -196,10 +202,16 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 	end
 
 	function Lasers:GetPeerColor(criminal_name)
-		local id = managers.criminals:character_color_id_by_name( criminal_name )
-		if id == 1 then id = id + 1 end
-		local color = Lasers.DefaultTeamColors[ id or 5 ]:with_alpha(Lasers.DefaultTeamColors[ id or 5 ].alpha or Lasers.DefaultOpacity)
-		color = color or Color(1,1,1):with_alpha(1)
+		local id = managers.criminals:character_peer_id_by_name( criminal_name )--character_color_id_by_name( criminal_name ) or 1
+		if not id then return Color(1,1,1):with_alpha(0.5) end
+		nnl_log("NNL: GetPeerColor called, returning id, criminal = " .. id .. ", " .. criminal_name)
+--		if id == 1 then id = id + 1 end
+		if not id then 
+			id = 1
+			nnl_log("NNL: No id found in GetPeerColor. Spoofing to 1")
+		end
+		local color = Lasers.DefaultTeamColors[id]
+		color = color or Color(1,1,1):with_alpha(0.5)
 		return color
 	end
 	
@@ -240,7 +252,6 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 			this_loc = v
 			data_string = data_string .. this_loc .. loc_sep
 		end
-		--todo add idiot-proofing for malformed gradient tables
 		nnl_log("NNL: New gradient string created, called [" .. data_string .. "]")
 		return data_string
 	end
@@ -267,9 +278,11 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 		return gradient_data
 	end
 		
+	--[[ this isn't ever called
 	function Lasers:GetColor(alpha)
 		return Lasers.DefaultTeamColors[LuaNetworking:LocalPeerID()]:with_alpha(0.07) --Lasers.Color:GetColor( alpha )
 	end
+	--]]
 
 	function Lasers:GetCriminalNameFromLaserUnit( laser )
 
@@ -342,7 +355,7 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 
 	function Lasers:UpdateLaser( laser, unit, t, dt )
 		local color
-		if not Lasers:IsEnabled() or (not Lasers:IsTeamNetworked()) then
+		if not Lasers:IsEnabled() then --or (not Lasers:IsTeamVanilla()) then
 			return
 		end
 		
@@ -351,12 +364,14 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 		
 			local criminal_name = Lasers:GetCriminalNameFromLaserUnit( laser )
 			if not criminal_name then
+				nnl_log("Criminal name not found in UpdateLaser. Cancelling Update function for this unit/frame.")
 				return
 			end
-			peerid_num = managers.criminals:character_color_id_by_name( criminal_name )
-
+--			peerid_num = managers.criminals:character_color_id_by_name( criminal_name )
+			peerid_num = managers.criminals:character_peer_id_by_name( criminal_name) 
+--			nnl_log("NNL: peerid_num experimental =" .. ( managers.criminals:character_peer_id_by_name( criminal_name ) or "Nil" ))
 			if Lasers:IsTeamNetworked() then
-				if LuaNetworking:GetNameFromPeerID( peerid_num ) == "Offyerrocker" then
+				if peerid_num and LuaNetworking:GetNameFromPeerID( peerid_num ) == "Offyerrocker" then
 					local override_color = GradientStep( t, Lasers.example_gradient, speed)
 					Lasers:SetColourOfLaser( laser, unit, t, dt, override_color)
 					nnl_log("NNL: Found Offy!")
@@ -365,14 +380,24 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 				
 				--get from stored team lasers
 				local color = Lasers.SavedTeamColors[criminal_name] --color can be both singlecolor and gradientcolor
-				if color then
+				if color or (type(color) == "table" and Lasers:IsMasterGradientEnabled()) then
 					Lasers:SetColourOfLaser( laser, unit, t, dt, color )
 					return
+				elseif type(color) == "table" and not (Lasers:IsMasterGradientEnabled() and Lasers:IsTeamGradientEnabled()) then
+					single_color = GradientStep(t, color, "single")
+					Lasers:SetColourOfLaser( laser, unit, t, dt, single_color)
+					--if team gradients or master gradients are off, but networked lasers are on, then instead just choose the first color of the networked gradient
+					--todo consistent flowchart, should not be calculating gradientstep here
+					--only problem is, i don't want to call the function to determine player type again in SetColourOfLaser to see which kind of laser we'll be making
 				end
 				--secondary display: if NetworkedLasers is enabled but networked color/tables are not found
 				--SetColourOfLaser is called at the end of this "if-checklist"
 				if Lasers:IsTeamUniform() then 
 					color = Lasers:GetPeerColor(criminal_name)
+					if unit then
+						nnl_log("Unit = " .. unit)
+						nnl_log("Unit peer id = " .. CriminalsManager:character_peer_id_by_unit(unit))
+					end
 				elseif Lasers:IsTeamCustom() then 
 					color = Lasers:GetTeamLaserColor()
 				elseif Lasers:IsTeamDisabled() then
@@ -418,6 +443,7 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 				Lasers:SetColourOfLaser (laser, unit, t, dt, "gradient")
 				return
 			else --add other overrides like rainbow
+--				nnl_log("NNL: Laser unit is not NPC owned. Gradients not enabled. Using Player Color.")
 				color = Lasers:GetPlayerLaserColor() or Lasers.generic_color
 				Lasers:SetColourOfLaser(laser, unit, t, dt, color)
 				return
@@ -472,6 +498,12 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 			nnl_log("NNL: Stopped invalid gradient during GradientStep.")
 			return Lasers.generic_color
 		end
+
+		if type(t) ~= "number" or type(override_speed) ~= "number" or override_speed == "single" then --todo choose which parameter should override into single_color mode
+			local single_color = gradient_table_colors[1] or Lasers.generic_color
+			return single_color
+		end
+		
 		local smoothness = Lasers.update_interval or 0		--frequency of laser updates, calculated per frame. the lower, the better the laser looks. affects performance!
 		local colors = gradient_table.colors
 		local locations = gradient_table.locations
@@ -481,7 +513,7 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 		local color_count
 --		nnl_log("NNL: _t /smoothness, _t = " .. math.floor(_t % smoothness) .. "|" .. _t)
 		if smoothness == 0 or ( math.floor(_t) % smoothness) == 0 then --luckily lua doesn't fall for div_by_0 errors :^)
-		
+
 			for k,v in ipairs(colors) do 
 				color_count = k
 			end
@@ -611,19 +643,16 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 					LuaNetworking:SendToPeers( Lasers.LuaNetID, my_gradient_string)
 				else
 					LuaNetworking:SendToPeers( Lasers.LuaNetID, col_str)
-				-- or col_str)
-					--[[
-					--if legacy_clients ~= nil then 
-						LuaNetworking:SendToPeersExcept( Lasers.legacy_clients, Lasers.LuaNetID, my_gradient_string )
-					--end
-				else
-					LuaNetworking:SendToPeersExcept( Lasers.legacy_clients, Lasers.LuaNetID, col_str)
 				end
+--				if legacy_clients ~= nil then 
+--					LuaNetworking:SendToPeersExcept( Lasers.legacy_clients, Lasers.LuaNetID, col_str)
+--				end
 				
 				for k,v in pairs(Lasers.legacy_clients) do
 					nnl_log("Sending legacy data to client: [" .. k .. "]")
 					LuaNetworking:SendToPeer(k,Lasers.LegacyID, col_str)--]]
 				end
+--end
 			end
 		end
 

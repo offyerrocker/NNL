@@ -4,7 +4,6 @@ Lasers._path = ModPath
 Lasers._data_path = Lasers._data_path or SavePath .. "nnlasers.txt"
 Lasers._data = Lasers._data or Lasers.settings or {}
 
-
 	Lasers.default_settings = Lasers.default_settings or {
 		enabled_gradients_master = "enabled", 
 --Player/self
