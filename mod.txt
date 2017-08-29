@@ -1,9 +1,9 @@
 {
 	"name" : "New Networked Lasers",
-	"description" : "Share your lasers with the world!",
-	"author" : "Offy and the Scooby-Doo Gang",
+	"description" : "Custom laser colors, synced with other modded players",
+	"author" : "Offyerrocker",
 	"contact" : "offyerrocker",
-	"version" : "0.7",
+	"version" : "public 0.37",
 	"hooks" : [
 		{
 			"hook_id" : "lib/managers/menumanager",
@@ -11,7 +11,7 @@
 		},
 		{
 			"hook_id" : "lib/units/weapons/weaponlaser",
-			"script_path" : "laser_player_weapon.lua"
+			"script_path" : "nnl.lua"
 		},
 		{
 			"hook_id" : "lib/units/weapons/weaponlaser",
@@ -19,12 +19,16 @@
 		},
 		{
 			"hook_id" : "lib/units/weapons/raycastweaponbase",
-			"script_path" : "laser_player_weapon.lua"
+			"script_path" : "nnl.lua"
+		},
+		{
+			"hook_id" : "lib/managers/mission/elementlasertrigger",
+			"script_path" : "nnl.lua"
 		}
 	],
 	"updates" : [
 		{
-			"revision" : 1,
+			"revision" : 3,
 			"identifier" : "NNL"
 		}
 	]

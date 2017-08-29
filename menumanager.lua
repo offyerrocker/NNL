@@ -6,29 +6,41 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 
 	Lasers.default_settings = Lasers.default_settings or {
 		enabled_gradients_master = "enabled", 
+		
+--[[
+	Gradient modes:
+		1: Disabled
+		2: Custom (menu set)
+		3: Rainbow
+		4: Siren
+--]]	
 --Player/self
-		enabled_own_gradients = "enabled",		
+		enabled_own_gradients = "enabled", --unused
+		own_gradients_mode = 1,
 		own_red = 0.9,
 		own_green = 0.2,
 		own_blue = 0.15,
 		own_alpha = 0.08,
 		
 --team/other players
-		enabled_team_gradients = "enabled",
+		enabled_team_gradients = "enabled", --unused
+		team_gradients_mode = 1,
 		team_red = 0.8,
 		team_green = 0.1,
 		team_blue = 0.25,
 		team_alpha = 0.04,
 		
 --police snipers
-		enabled_snpr_gradients = "enabled",
+		enabled_snpr_gradients = "enabled", --unused
+		snpr_gradients_mode = 1,
 		snpr_red = 1,
 		snpr_green = 0.2,
 		snpr_blue = 0.2,
 		snpr_alpha = 0.5,
 				
 --world lasers/vault lasers (go bank, big bank, murky station, golden grin etc)
-		enabled_wl_gradients = "enabled",
+		enabled_wl_gradients = "enabled", --unused
+		wl_gradients_mode = 1,
 		wl_red = 0.8,
 		wl_green = 0.5,
 		wl_blue = 0.15,
@@ -36,7 +48,8 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 
 --swat turrets
 	--turret normal attack
-		enabled_turr_gradients = "enabled",
+		enabled_turr_gradients = "enabled", --unused
+		turr_gradients_mode = 1,
 		turr_att_red = 1,
 		turr_att_green = 0.4,
 		turr_att_blue = 0.1,
@@ -65,7 +78,8 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 	--network my lasers, on by default. Why else would you have downloaded this mod?
 		networked_lasers = "enabled"
 	}
-		
+	
+
 	Lasers.settings = Lasers.settings or Lasers.default_settings
 	
 	Lasers._data = Lasers._data or Lasers.settings or {}
@@ -88,29 +102,11 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 			file:close()
 		end
 	end
-	--[[
-	function Lasers:getCompleteTable()
-		local tbl = {}
-		for i, v in pairs (Lasers.settings) do
-			if not i == nil then
-				tbl[i] = v + 1
-			end
-		end
-		return tbl
-	end
-	--]]
+
 	function Lasers:Reset()
 		Lasers.settings = Lasers.default_settings
 		--i might be going to programmer's hell for this
 	end
-
-	--[[
-	function setPR (this, item)
-		if not Lasers.settings[own_red] then 
-			Lasers:Load()
-		end
-	end
-	--]]
 
 	Hooks:Add("LocalizationManagerPostInit", "LocalizationManagerPostInit_NewNetworkedLasers", function( loc )
 		loc:load_localization_file( Lasers._path .. "en.txt")
@@ -277,6 +273,33 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 			Lasers:Save()
 		end
 		
+		
+		MenuCallbackHandler.callback_own_gradient_multiplechoice = function(self,item)
+			Lasers.settings.own_gradients_mode = tonumber(item:value())
+			Lasers:Save()
+		end
+		
+		MenuCallbackHandler.callback_team_gradient_multiplechoice = function(self,item)
+			Lasers.settings.team_gradients_mode = tonumber(item:value())
+			Lasers:Save()
+		end		
+		
+		MenuCallbackHandler.callback_snpr_gradient_multiplechoice = function(self,item)
+			Lasers.settings.snpr_gradients_mode = tonumber(item:value())
+			Lasers:Save()
+		end
+		
+		MenuCallbackHandler.callback_wl_gradient_multiplechoice = function(self,item)
+			Lasers.settings.wl_gradients_mode = tonumber(item:value())
+			Lasers:Save()
+		end
+		
+		MenuCallbackHandler.callback_turr_gradient_multiplechoice = function(self,item)
+			Lasers.settings.turr_gradients_mode = tonumber(item:value())
+			Lasers:Save()
+		end
+		
+
 		MenuCallbackHandler.callback_team_lasers_display_multiplechoice = function(self,item)
 			Lasers.settings.display_team_lasers = tonumber(item:value())
 			Lasers:Save()
@@ -330,6 +353,5 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 		
 		Lasers:Load()
 		MenuHelper:LoadFromJsonFile(Lasers._path .. "options.txt", Lasers, Lasers.settings)
---		MenuHelper:LoadFromJsonFile(LaserTeam._path .. "options.txt", LaserTeam, LaserTeam:getCompleteTable())
 		
 	end )
