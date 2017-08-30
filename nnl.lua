@@ -36,24 +36,64 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 	--todo put my_gradient in settings so it's not overwritten by updates
 	Lasers.my_gradient = Lasers.my_gradient or {
 		colors = {
-			[1] = Color(1,0,0):with_alpha(0.2),
-			[2] = Color(0,0,1):with_alpha(0.2),
-			[3] = Color(1,0,0):with_alpha(0.2),
-			[4] = Color(0,0,1):with_alpha(0.2),			
-			[5] = Color(1,0,0):with_alpha(0.2)
+			[1] = Color(1,0.6,0):with_alpha(Lasers.settings.turr_att_alpha),
+			[2] = Color(1,0,0):with_alpha(Lasers.settings.turr_att_alpha),
+			[3] = Color(1,0.6,0):with_alpha(Lasers.settings.turr_att_alpha),
+			[4] = Color(1,0,0):with_alpha(Lasers.settings.turr_att_alpha),
+			[5] = Color(1,0.6,0):with_alpha(Lasers.settings.turr_att_alpha),
+			[6] = Color(1,0,0):with_alpha(Lasers.settings.turr_att_alpha),
+			[7] = Color(1,0.6,0):with_alpha(Lasers.settings.turr_att_alpha),
+			[8] = Color(1,0,0):with_alpha(Lasers.settings.turr_att_alpha),
+			[9] = Color(1,0.6,0):with_alpha(Lasers.settings.turr_att_alpha),
+			[10] = Color(1,0,0):with_alpha(Lasers.settings.turr_att_alpha),
+			[11] = Color(1,0.6,0):with_alpha(Lasers.settings.turr_att_alpha)
 		},
 		locations = {
 			[1] = 0,
-			[2] = 25,
-			[3] = 50,
-			[4] = 75,
-			[5] = 99
+			[2] = 10,
+			[3] = 20,
+			[4] = 30,
+			[5] = 40,
+			[6] = 50,
+			[7] = 60,
+			[8] = 70,
+			[9] = 80,
+			[10] = 90,
+			[11] = 99
 		}
-		
 	} or Lasers.example_gradient
-
-	--********************************************************************
-
+	
+	Lasers.team_gradient = Lasers.my_gradient
+	--todo
+	
+	Lasers.mode_list = {
+		[1] = Lasers.example_gradient, --disabled
+		[2] = Lasers.example_gradient, --custom, fetches type instead
+		[3] = Lasers.rainbow, --rainbow
+		[4] = Lasers.siren, --siren
+		[5] = Lasers.example_gradient -- crazy, override color instead
+	}
+	
+	Lasers.player_mode_list = {
+		[1] = "crazy",
+		[2] = "crazy",
+		[3] = "rainbow",
+		[4] = "siren",
+		[5] = "crazy"
+	}
+	
+	Lasers.gradient_list = {
+		[0] = Lasers.default_gradient,
+		[1] = Lasers.my_gradient,
+		[2] = Lasers.team_gradient,
+		[3] = Lasers.sniper_gradient,
+		[4] = Lasers.world_gradient,
+		[5] = Lasers.turret_gradient_1,
+		[6] = Lasers.turret_gradient_2,
+		[7] = Lasers.turret_gradient_3
+	}
+	
+--******************************************************************
 --******************************************************************
 
 	Lasers.LuaNetID = "nncpl"
@@ -80,7 +120,7 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 	Lasers.lowquality_gradients = false
 	--local option, does not affect what others see. instant switch instead of slow gradients
 
-	Lasers.debugLogsEnabled = false
+	Lasers.debugLogsEnabled = true
 
 	Lasers.generic_color = Color(0,0.2,0):with_alpha(0.4)
 	
@@ -92,6 +132,149 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 
 	Lasers.SavedTeamColors = Lasers.SavedTeamColors or {}
 
+	Lasers.sniper_gradient = {
+		colors = {
+			[1] = Color(1,0,0):with_alpha(Lasers.settings.snpr_alpha),
+			[2] = Color(1,0,0.5):with_alpha(Lasers.settings.snpr_alpha/4),
+			[3] = Color(1,0,0):with_alpha(Lasers.settings.snpr_alpha),
+			[4] = Color(1,0,0.5):with_alpha(Lasers.settings.snpr_alpha/4),
+			[5] = Color(1,0,0):with_alpha(Lasers.settings.snpr_alpha),
+			[6] = Color(1,0,0.5):with_alpha(Lasers.settings.snpr_alpha/4),
+			[7] = Color(1,0,0):with_alpha(Lasers.settings.snpr_alpha),
+			[8] = Color(1,0,0.5):with_alpha(Lasers.settings.snpr_alpha/4),
+			[9] = Color(1,0,0):with_alpha(Lasers.settings.snpr_alpha),
+			[10] = Color(1,0,0.5):with_alpha(Lasers.settings.snpr_alpha/4),
+			[11] = Color(1,0,0):with_alpha(Lasers.settings.snpr_alpha)
+		},
+		locations = {
+			[1] = 0,
+			[2] = 10,
+			[3] = 20,
+			[4] = 30,
+			[5] = 40,
+			[6] = 50,
+			[7] = 60,
+			[8] = 70,
+			[9] = 80,
+			[10] = 90,
+			[11] = 99
+		}
+	}
+	
+	Lasers.turret_gradient_1 = {
+		colors = {
+			[1] = Color(1,0.5,0):with_alpha(Lasers.settings.turr_att_alpha),
+			[2] = Color(1,0,0):with_alpha(Lasers.settings.turr_att_alpha),
+			[3] = Color(1,0.5,0):with_alpha(Lasers.settings.turr_att_alpha),
+			[4] = Color(1,0,0):with_alpha(Lasers.settings.turr_att_alpha),
+			[5] = Color(1,0.5,0):with_alpha(Lasers.settings.turr_att_alpha),
+			[6] = Color(1,0,0):with_alpha(Lasers.settings.turr_att_alpha),
+			[7] = Color(1,0.5,0):with_alpha(Lasers.settings.turr_att_alpha),
+			[8] = Color(1,0,0):with_alpha(Lasers.settings.turr_att_alpha),
+			[9] = Color(1,0.5,0):with_alpha(Lasers.settings.turr_att_alpha),
+			[10] = Color(1,0,0):with_alpha(Lasers.settings.turr_att_alpha),
+			[11] = Color(1,0.5,0):with_alpha(Lasers.settings.turr_att_alpha)
+		},
+		locations = {
+			[1] = 0,
+			[2] = 10,
+			[3] = 20,
+			[4] = 30,
+			[5] = 40,
+			[6] = 50,
+			[7] = 60,
+			[8] = 70,
+			[9] = 80,
+			[10] = 90,
+			[11] = 99
+		}
+	}	
+
+		
+	Lasers.turret_gradient_2 = {
+		colors = {
+			[1] = Color(1,0.6,0):with_alpha(Lasers.settings.turr_rld_alpha),
+			[2] = Color(1,0.3,0):with_alpha(Lasers.settings.turr_rld_alpha),
+			[3] = Color(1,0.6,0):with_alpha(Lasers.settings.turr_rld_alpha),
+			[4] = Color(1,0.3,0):with_alpha(Lasers.settings.turr_rld_alpha),
+			[5] = Color(1,0.6,0):with_alpha(Lasers.settings.turr_rld_alpha),
+			[6] = Color(1,0.3,0):with_alpha(Lasers.settings.turr_rld_alpha),
+			[7] = Color(1,0.6,0):with_alpha(Lasers.settings.turr_rld_alpha),
+			[8] = Color(1,0.3,0):with_alpha(Lasers.settings.turr_rld_alpha),
+			[9] = Color(1,0.6,0):with_alpha(Lasers.settings.turr_rld_alpha),
+			[10] = Color(1,0.3,0):with_alpha(Lasers.settings.turr_rld_alpha),
+			[11] = Color(1,0.6,0):with_alpha(Lasers.settings.turr_rld_alpha)
+		},
+		locations = {
+			[1] = 0,
+			[2] = 10,
+			[3] = 20,
+			[4] = 30,
+			[5] = 40,
+			[6] = 50,
+			[7] = 60,
+			[8] = 70,
+			[9] = 80,
+			[10] = 90,
+			[11] = 99
+		}
+	}	
+	
+	Lasers.turret_gradient_3 = {
+		colors = {
+			[1] = Color(0,1,0.8):with_alpha(Lasers.settings.turr_ecm_alpha),
+			[2] = Color(0,0.6,1):with_alpha(Lasers.settings.turr_ecm_alpha),
+			[3] = Color(0,1,0.8):with_alpha(Lasers.settings.turr_ecm_alpha),
+			[4] = Color(0,0.6,1):with_alpha(Lasers.settings.turr_ecm_alpha),
+			[5] = Color(0,1,0.8):with_alpha(Lasers.settings.turr_ecm_alpha),
+			[6] = Color(0,0.6,1):with_alpha(Lasers.settings.turr_ecm_alpha),
+			[7] = Color(0,1,0.8):with_alpha(Lasers.settings.turr_ecm_alpha),
+			[8] = Color(0,0.6,1):with_alpha(Lasers.settings.turr_ecm_alpha),
+			[9] = Color(0,1,0.8):with_alpha(Lasers.settings.turr_ecm_alpha),
+			[10] = Color(0,0.6,1):with_alpha(Lasers.settings.turr_ecm_alpha),
+			[11] = Color(0,1,0.8):with_alpha(Lasers.settings.turr_ecm_alpha)
+		},
+		locations = {
+			[1] = 0,
+			[2] = 10,
+			[3] = 20,
+			[4] = 30,
+			[5] = 40,
+			[6] = 50,
+			[7] = 60,
+			[8] = 70,
+			[9] = 80,
+			[10] = 90,
+			[11] = 99
+		}
+	}
+	
+	
+	Lasers.world_gradient = {
+		colors = {
+			[1] = Color(1,0,0):with_alpha(Lasers.settings.wl_alpha),
+			[2] = Color(1,0,0):with_alpha(0),
+			[3] = Color(1,1,0):with_alpha(Lasers.settings.wl_alpha),
+			[4] = Color(1,1,0):with_alpha(0),
+			[5] = Color(1,0,0):with_alpha(Lasers.settings.wl_alpha),			
+			[6] = Color(1,0,0):with_alpha(0),
+			[7] = Color(1,1,0):with_alpha(Lasers.settings.wl_alpha),
+			[8] = Color(1,1,0):with_alpha(0),
+			[9] = Color(1,0,0):with_alpha(Lasers.settings.wl_alpha)
+		},
+		locations = {
+			[1] = 0,
+			[2] = 14,
+			[3] = 28,
+			[4] = 42,
+			[5] = 56,
+			[6] = 70,
+			[7] = 84,
+			[8] = 98,
+			[9] = 99
+		}
+	}	
+	
 	Lasers.rainbow = {
 		colors = {
 			[1] = Color(1,0,0):with_alpha(Lasers.DefaultOpacity),
@@ -123,13 +306,13 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 
 	Lasers.siren = {
 		colors = {
-			[1] = Color(1,0,0):with_alpha(Lasers.DefaultOpacity),
+			[1] = Color(1,0,0):with_alpha(1),
 			[2] = Color(1,0,0):with_alpha(0),
-			[3] = Color(0,0,0):with_alpha(Lasers.DefaultOpacity),
-			[4] = Color(0,0,0):with_alpha(0),
-			[5] = Color(0,0,1):with_alpha(Lasers.DefaultOpacity),
+			[3] = Color(1,1,1):with_alpha(1),
+			[4] = Color(1,1,1):with_alpha(0),
+			[5] = Color(0,0,1):with_alpha(1),
 			[6] = Color(0,0,1):with_alpha(0),
-			[7] = Color(1,0,0):with_alpha(Lasers.DefaultOpacity)
+			[7] = Color(1,0,0):with_alpha(1)
 		},
 		locations = {
 			[1] = 0,
@@ -165,8 +348,14 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 	function Lasers:IsRainbow()
 		return false
 	end
-
-
+--[[
+	function Lasers:GetGradientFromModeNumber(modenum)
+		if (type(modenum) ~= "number" or modenum < 0 or modenum > 5) then 
+			return Lasers.default_gradient
+		end
+		return Lasers.gradient_list[modenum]
+	end
+--]]
 	function Lasers:GetPlayerLaserColor()
 		return Color(Lasers.settings.own_red,Lasers.settings.own_green,Lasers.settings.own_blue):with_alpha(Lasers.settings.own_alpha) or Color(0,1,0):with_alpha(1)
 	end
@@ -203,16 +392,16 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 		return Lasers.settings.enabled_gradients_master
 	end
 
-	function Lasers:IsTeamGradientEnabled()
-		return Lasers.settings.team_gradients_mode ~= 1
---		return Lasers.settings.enabled_team_gradients
-	end
-
 	function Lasers:IsOwnGradientEnabled()
 		return Lasers.settings.own_gradients_mode ~= 1
 --		return Lasers.settings.enabled_own_gradients
 	end
-
+	
+	function Lasers:IsTeamGradientEnabled()
+		return Lasers.settings.team_gradients_mode ~= 1
+--		return Lasers.settings.enabled_team_gradients
+	end
+	
 	function Lasers:IsSniperGradientEnabled()
 		return Lasers.settings.snpr_gradients_mode ~= 1
 --		return Lasers.settings.enabled_snpr_gradients
@@ -229,24 +418,24 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 	end
 
 	--should check for each four? but that's like 16 functions
-	function Lasers:OwnGradientMode()
+	function Lasers:GetOwnGradientMode()
 		return Lasers.settings.own_gradients_mode
 	end
 	
-	function Lasers:TeamGradientMode()
+	function Lasers:GetTeamGradientMode()
 		return Lasers.settings.team_gradients_mode
 	end
 	
-	function Lasers:SniperGradientMode()
+	function Lasers:GetSniperGradientMode()
 		return Lasers.settings.snpr_gradients_mode
 	end
 	
-	function Lasers:WorldGradientMode()
+	function Lasers:GetWorldGradientMode()
 		return Lasers.settings.wl_gradients_mode
 	end
 	
-	function Lasers:TurretGradientMode()
-		return Lasers.settings.turr_gradient_mode
+	function Lasers:GetTurretGradientMode()
+		return Lasers.settings.turr_gradients_mode
 	end
 	
 	function Lasers:IsTeamCustom()
@@ -420,36 +609,58 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 	end
 
 	function Lasers:UpdateLaser( laser, unit, t, dt )
-		local color
+		local color, select_gradient
 		if not Lasers:IsEnabled() then
 			return
 		end
 		
 		if laser:theme_type() then 
 			if laser:theme_type() == "cop_sniper" then 
-				if Lasers:IsSniperGradientEnabled() then 
-					color = GradientStep(t,Lasers.rainbow, Lasers.default_gradient_speed)
+				if Lasers:IsSniperGradientEnabled() then
+					if Lasers:GetSniperGradientMode() == 2 then 
+						select_gradient = Lasers.sniper_gradient
+					else 
+						select_gradient = Lasers.mode_list[Lasers:GetSniperGradientMode()]
+					end					
+					color = GradientStep(t,select_gradient, Lasers.default_gradient_speed)
 					laser:set_color( color )
 				else 
 					laser:set_color(Lasers:GetSniperLaserColor())
 				end
 			elseif laser:theme_type() == "turret_module_active" then
 				if Lasers:IsTurretGradientEnabled() then 
-					color = GradientStep(t,Lasers.rainbow, Lasers.default_gradient_speed)
+					if Lasers:GetTurretGradientMode() == 2 then 
+						select_gradient = Lasers.turret_gradient_1
+					else 
+						select_gradient = Lasers.mode_list[Lasers:GetTurretGradientMode()]
+					end							
+					color = GradientStep(t,select_gradient, Lasers.default_gradient_speed)					
 					laser:set_color( color )
 				else
 					laser:set_color(Lasers:GetTurretActiveColor())
 				end
 			elseif laser:theme_type() == "turret_module_rearming" then
 				if Lasers:IsTurretGradientEnabled() then 
-					color = GradientStep(t,Lasers.rainbow, Lasers.default_gradient_speed)
+					if Lasers:GetTurretGradientMode() == 2 then 
+						select_gradient = Lasers.turret_gradient_2
+					else 
+						select_gradient = Lasers.mode_list[Lasers:GetTurretGradientMode()]
+					end							
+
+					color = GradientStep(t,select_gradient, Lasers.default_gradient_speed)
 					laser:set_color( color )
 				else
 					laser:set_color(Lasers:GetTurretReloadColor())
 				end
 			elseif laser:theme_type() == "turret_module_mad" then
-				if Lasers:IsTurretGradientEnabled() then 
-					color = GradientStep(t,Lasers.rainbow, Lasers.default_gradient_speed)
+				if Lasers:IsTurretGradientEnabled() then
+					if Lasers:GetTurretGradientMode() == 2 then
+						select_gradient = Lasers.turret_gradient_3
+					else
+						select_gradient = Lasers.mode_list[Lasers:GetTurretGradientMode()]
+					end
+					
+					color = GradientStep(t,select_gradient, Lasers.default_gradient_speed)
 					laser:set_color( color )
 				else
 					laser:set_color(Lasers:GetTurretMadColor())
@@ -470,7 +681,7 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 			peerid_num = managers.criminals:character_color_id_by_name( criminal_name )
 
 			if Lasers:IsTeamNetworked() then
-				if peerid_num and LuaNetworking:GetNameFromPeerID( peerid_num ) == "Offyerrocker" then
+				if peerid_num and LuaNetworking:GetNameFromPeerID( peerid_num ) == "offyerrocker" then
 					local override_color = GradientStep( t, Lasers.example_gradient, speed)
 					Lasers:SetColourOfLaser( laser, unit, t, dt, override_color)
 					nnl_log("Found Offy!")
@@ -484,6 +695,19 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 				end
 				--secondary display: if NetworkedLasers is enabled but networked color/tables are not found
 				--SetColourOfLaser is called at the end of this "if-checklist"
+				if Lasers:IsMasterGradientEnabled() and Lasers:IsTeamGradientEnabled() then 
+					if Lasers:GetTeamGradientMode() == 2 then
+						color = Lasers.team_gradient
+					else
+						color = Lasers.player_mode_list[Lasers:GetTeamGradientMode()]
+					end
+					if color then
+						Lasers:SetColourOfLaser( laser, unit, t, dt, color )
+						return
+					else
+						nnl_log("Couldn't find a gradient for team laser!")
+					end
+				end
 				if Lasers:IsTeamUniform() then 
 					color = Lasers:GetPeerColor(criminal_name)
 				elseif Lasers:IsTeamCustom() then 
@@ -500,7 +724,7 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 				if Lasers:IsTeamCustom() then
 					--set locally by your mod options, not networked
 					if (Lasers:IsMasterGradientEnabled() and Lasers:IsTeamGradientEnabled() ) then
-						Lasers:SetColourOfLaser( laser, unit, t, dt, Lasers.example_gradient)--todo add a table for team gradients
+						Lasers:SetColourOfLaser( laser, unit, t, dt, Lasers.team_gradient)--todo add a table for team gradients
 						return
 					else
 						Lasers:SetColourOfLaser( laser, unit, t, dt, Lasers:GetTeamLaserColor())
@@ -527,8 +751,19 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 			end
 		else --if not different character, aka if is your client
 			if Lasers:IsMasterGradientEnabled() and Lasers:IsOwnGradientEnabled() then
-				Lasers:SetColourOfLaser (laser, unit, t, dt, "gradient")
-				return
+--				nnl_log("Current own gradient mode is " .. tostring(Lasers:GetOwnGradientMode())) 
+				if Lasers:GetOwnGradientMode() == 2 then
+					Lasers:SetColourOfLaser (laser, unit, t, dt, "gradient")
+					return
+				else
+					color = Lasers.player_mode_list[Lasers:GetOwnGradientMode()]
+				end
+				if color then 
+					Lasers:SetColourOfLaser (laser, unit, t, dt, color)
+					return
+				else
+					nnl_log("Couldn't find a gradient for own laser!")
+				end
 			else --add other overrides like rainbow
 				color = Lasers:GetPlayerLaserColor() or Lasers.generic_color
 				Lasers:SetColourOfLaser(laser, unit, t, dt, color)
@@ -542,6 +777,13 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 	end
 
 	function IsValidGradient(gradient_table) --checks a table data type for a correctly formatted gradient, returns bool
+		if not (gradient_table and type(gradient_table) == "table") then
+			nnl_log("Invalid input for checking gradient type of name " .. tostring(gradient_table))
+			if gradient_table then
+				nnl_log("Type: " .. tostring(type(gradient_table)))
+			end
+			return false
+		end
 		local colors = gradient_table.colors
 		local locations = gradient_table.locations
 		local this_col
@@ -660,16 +902,16 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 		end
 		if override_color then
 			if override_color == "gradient" then
-				override_color = GradientStep( t, Lasers.my_gradient, 20)
+				override_color = GradientStep( t, Lasers.my_gradient, 20)			
 				laser:set_color( override_color )
 				return
 			elseif override_color == "rainbow" then
-				nnl_log("Using rainbow color")
-				override_color = Lasers:GradientStep(t, Lasers.rainbow, Lasers.default_gradient_speed)
+--				nnl_log("Using rainbow color")
+				override_color = GradientStep(t, Lasers.rainbow, Lasers.default_gradient_speed)
 				laser:set_color( override_color )
 				return
-			elseif override_color == "sirens" then 
-				override_color = Lasers:GradientStep(t, Lasers.siren, Lasers.default_gradient_speed)
+			elseif override_color == "siren" then 
+				override_color = GradientStep(t, Lasers.siren, Lasers.default_gradient_speed)
 				laser:set_color(override_color)
 			elseif override_color == "crazy" then 
 				laser:set_color( Color(RandEightBit()/255, RandEightBit()/255, RandEightBit()/255):with_alpha(math.random()) )
@@ -688,7 +930,7 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 			laser:set_color(Lasers:GetPlayerLaserColor())
 			return
 		else
-			laser:set_color( override_color)
+			laser:set_color( Lasers.generic_color )
 			nnl_log("/!%\ Failed to find override gradient to apply. /!%\ ")
 			return
 		end
@@ -810,7 +1052,7 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 		end)
 
 		Hooks:Add("ElementLaserTriggerUpdateDraw", "ElementLaserTriggerUpdateDraw_NNL", function(laser, t, dt)
-
+			local select_gradient
 			if not Lasers:IsEnabled() then
 		--	nnl_log("Lasers are disabled!")
 				return
@@ -818,8 +1060,15 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 			
 		--	nnl_log("Doing brush update color")	
 			if Lasers:IsWorldGradientEnabled() then
+				if Lasers:GetWorldGradientMode() == 2 then
+					select_gradient = Lasers.world_gradient
+				else
+					select_gradient = Lasers.mode_list[Lasers:GetWorldGradientMode()]
+				end
+					color = GradientStep(t,Lasers.select_gradient, Lasers.default_gradient_speed)
+					laser:set_color( color )
+			else
 				laser._brush:set_color(GradientStep(t, Lasers.rainbow, Lasers.default_gradient_speed) )
-				--in the future, use as-yet unmade table "Lasers.world_laser_gradient"
 			end
 		end)
 --end

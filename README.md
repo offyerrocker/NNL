@@ -126,10 +126,10 @@ where xxxxxx is a hexadecimal code (base16 number system) with characters 0-f. T
 ------
 
 **IMPORTANT!**
-Your own gradient setting is stored in laser_player_weapon.lua:100 (at the moment.) You must change the values in this one if it's the gradient you want your laser to display to yourself and others!
+Your own gradient setting is stored in nnl:37 (at the moment.) You must change the values in this one if it's the gradient you want your laser to display to yourself and others!
 
 **More advanced settings:**
-*These settings can be found in laser_player_weapon.lua. You can change them by manually setting their values to "true" or "false."* 
+*These settings can be found in nnl.lua. You can change them by manually setting their values to "true" or "false."* 
 *Disturb and edit these settings at your own risk!*
 
 Lasers.debugLogsEnabled: Enables writing of debug logs to your Lua log files, located in your mods/logs/ folder. If you don't have a logs folder, and you want PAYDAY 2 BLT to start writing logs, create a folder called "logs" in your mods folder. *Note that these are completely separate and different from PAYDAY 2's crashlogs.* False by default.
