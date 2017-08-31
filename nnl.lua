@@ -120,7 +120,7 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 	Lasers.lowquality_gradients = false
 	--local option, does not affect what others see. instant switch instead of slow gradients
 
-	Lasers.debugLogsEnabled = true
+	Lasers.debugLogsEnabled = false
 
 	Lasers.generic_color = Color(0,0.2,0):with_alpha(0.4)
 	
@@ -194,15 +194,15 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 	Lasers.turret_gradient_2 = {
 		colors = {
 			[1] = Color(1,0.6,0):with_alpha(Lasers.settings.turr_rld_alpha),
-			[2] = Color(1,0.3,0):with_alpha(Lasers.settings.turr_rld_alpha),
+			[2] = Color(0.8,0.3,0):with_alpha(Lasers.settings.turr_rld_alpha),
 			[3] = Color(1,0.6,0):with_alpha(Lasers.settings.turr_rld_alpha),
-			[4] = Color(1,0.3,0):with_alpha(Lasers.settings.turr_rld_alpha),
+			[4] = Color(0.8,0.3,0):with_alpha(Lasers.settings.turr_rld_alpha),
 			[5] = Color(1,0.6,0):with_alpha(Lasers.settings.turr_rld_alpha),
-			[6] = Color(1,0.3,0):with_alpha(Lasers.settings.turr_rld_alpha),
+			[6] = Color(0.8,0.3,0):with_alpha(Lasers.settings.turr_rld_alpha),
 			[7] = Color(1,0.6,0):with_alpha(Lasers.settings.turr_rld_alpha),
-			[8] = Color(1,0.3,0):with_alpha(Lasers.settings.turr_rld_alpha),
+			[8] = Color(0.8,0.3,0):with_alpha(Lasers.settings.turr_rld_alpha),
 			[9] = Color(1,0.6,0):with_alpha(Lasers.settings.turr_rld_alpha),
-			[10] = Color(1,0.3,0):with_alpha(Lasers.settings.turr_rld_alpha),
+			[10] = Color(0.8,0.3,0):with_alpha(Lasers.settings.turr_rld_alpha),
 			[11] = Color(1,0.6,0):with_alpha(Lasers.settings.turr_rld_alpha)
 		},
 		locations = {
@@ -624,8 +624,10 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 					end					
 					color = GradientStep(t,select_gradient, Lasers.default_gradient_speed)
 					laser:set_color( color )
+					return
 				else 
 					laser:set_color(Lasers:GetSniperLaserColor())
+					return
 				end
 			elseif laser:theme_type() == "turret_module_active" then
 				if Lasers:IsTurretGradientEnabled() then 
@@ -636,8 +638,10 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 					end							
 					color = GradientStep(t,select_gradient, Lasers.default_gradient_speed)					
 					laser:set_color( color )
+					return
 				else
 					laser:set_color(Lasers:GetTurretActiveColor())
+					return
 				end
 			elseif laser:theme_type() == "turret_module_rearming" then
 				if Lasers:IsTurretGradientEnabled() then 
@@ -649,8 +653,10 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 
 					color = GradientStep(t,select_gradient, Lasers.default_gradient_speed)
 					laser:set_color( color )
+					return
 				else
 					laser:set_color(Lasers:GetTurretReloadColor())
+					return
 				end
 			elseif laser:theme_type() == "turret_module_mad" then
 				if Lasers:IsTurretGradientEnabled() then
@@ -662,8 +668,10 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 					
 					color = GradientStep(t,select_gradient, Lasers.default_gradient_speed)
 					laser:set_color( color )
+					return
 				else
 					laser:set_color(Lasers:GetTurretMadColor())
+					return
 				end
 			elseif laser:theme_type() ~= "default" then
 				nnl_log("Default unit's theme type is " .. tostring(laser:theme_type()))
@@ -931,7 +939,7 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 			return
 		else
 			laser:set_color( Lasers.generic_color )
-			nnl_log("/!%\ Failed to find override gradient to apply. /!%\ ")
+			nnl_log("!! Failed to find override gradient to apply. !!")
 			return
 		end
 
@@ -964,10 +972,12 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 			if Lasers:IsRainbow() then
 				col_str = "rainbow"
 			end
-			local my_gradient_string = Lasers:GradientTableToString(Lasers.my_gradient) or false
-			nnl_log("Completed table to string conversion. Result: " .. my_gradient_string )
-			if Lasers.settings.networked_lasers then
-				if Lasers:IsMasterGradientEnabled() and my_gradient_string then
+			if Lasers:IsMasterGradientEnabled() and Lasers:IsOwnGradientEnabled() then --don't calculate unless you have gradients enabled, duh
+				local my_gradient_string = Lasers:GradientTableToString(Lasers.my_gradient) or false
+				nnl_log("Completed table to string conversion. Result: " .. my_gradient_string )
+			end
+			if Lasers:IsTeamNetworked() then
+				if Lasers:IsMasterGradientEnabled() and Lasers:IsOwnGradientEnabled() and my_gradient_string then
 					LuaNetworking:SendToPeers( Lasers.LuaNetID, my_gradient_string)
 				else
 					LuaNetworking:SendToPeers( Lasers.LuaNetID, col_str)
@@ -1066,7 +1076,12 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 					select_gradient = Lasers.mode_list[Lasers:GetWorldGradientMode()]
 				end
 					color = GradientStep(t,Lasers.select_gradient, Lasers.default_gradient_speed)
-					laser:set_color( color )
+					if color then 
+						laser:set_color( color )
+						return
+					end
+					nnl_log ("Failed to create color.")
+					return
 			else
 				laser._brush:set_color(GradientStep(t, Lasers.rainbow, Lasers.default_gradient_speed) )
 			end

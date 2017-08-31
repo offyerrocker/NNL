@@ -1,9 +1,12 @@
 {
-	"name" : "New Networked Lasers",
+	"name" : "New Networked Lasers (BLT2)",
 	"description" : "Custom laser colors, synced with other modded players",
 	"author" : "Offyerrocker",
 	"contact" : "offyerrocker",
-	"version" : "public 0.37",
+	"version" : "Stable 1.2",
+	"blt_version" : 2,
+	"color" : "255 0 0",
+	"image" : "nnl.png",
 	"hooks" : [
 		{
 			"hook_id" : "lib/managers/menumanager",
@@ -28,7 +31,7 @@
 	],
 	"updates" : [
 		{
-			"revision" : 3,
+			"revision" : 5,
 			"identifier" : "NNL"
 		}
 	]

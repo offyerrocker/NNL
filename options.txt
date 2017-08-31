@@ -1,6 +1,6 @@
 {
 	"menu_id" : "new_networked_lasers_options",
-	"parent_menu_id" : "lua_mod_options_menu",
+	"parent_menu_id" : "blt_options",
 	"title" : "nnl_menu_title",
     "back_callback" : "callback_nnl_close",
 	"items" : [
