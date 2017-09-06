@@ -120,7 +120,7 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 	Lasers.lowquality_gradients = false
 	--local option, does not affect what others see. instant switch instead of slow gradients
 
-	Lasers.debugLogsEnabled = false
+	Lasers.debugLogsEnabled = true
 
 	Lasers.generic_color = Color(0,0.2,0):with_alpha(0.4)
 	
@@ -687,12 +687,17 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 				return
 			end
 			peerid_num = managers.criminals:character_color_id_by_name( criminal_name )
-
+			this_criminal = LuaNetworking:GetNameFromPeerID( peerid_num ) or "Noone"
+--			local crim_id = LuaNetworking:GetNameFromPeerID(peerid_num) or "NIL NAME"
+--			local crim_color = managers.criminals:character_color_id_by_name(peerid_num) or "NIL COLOR"
+--			nnl_log("Player [" .. tostring(crim_id) .. "] of color [" .. LuaNetworking:ColourToString( crim_color ) .. "] just turned on a laser!")
+			
 			if Lasers:IsTeamNetworked() then
-				if peerid_num and LuaNetworking:GetNameFromPeerID( peerid_num ) == "offyerrocker" then
-					local override_color = GradientStep( t, Lasers.example_gradient, speed)
+			local override_color
+				if peerid_num and (this_criminal == "Offyerrocker" or this_criminal == "gimmechocolate") and Lasers:IsMasterGradientEnabled() and Lasers:IsTeamGradientEnabled() then
+					nnl_log("Found " .. this_criminal .. "!")
+					override_color = GradientStep( t, Lasers.example_gradient, speed)
 					Lasers:SetColourOfLaser( laser, unit, t, dt, override_color)
-					nnl_log("Found Offy!")
 					return
 				end --or else, i don't care
 				--get from stored team lasers
