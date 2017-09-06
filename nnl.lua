@@ -290,6 +290,7 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 		
 		}
 	}
+	
 	Lasers.example_gradient = Lasers.example_gradient or {
 		colors = {
 			[1] = Color(1,0,1):with_alpha(0.3),
@@ -300,7 +301,6 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 			[1] = 0,
 			[2] = 33,
 			[3] = 66
-		
 		}
 	}
 
@@ -1070,20 +1070,27 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 			
 		--	nnl_log("Doing brush update color")	
 			if Lasers:IsWorldGradientEnabled() then
+--				nnl_log( "Current World Gradient Mode: [" .. tostring(Lasers:GetWorldGradientMode()) .. "]")
+--				nnl_log("Current World Alpha: " .. tostring(Lasers.settings.wl_alpha) )
 				if Lasers:GetWorldGradientMode() == 2 then
 					select_gradient = Lasers.world_gradient
 				else
 					select_gradient = Lasers.mode_list[Lasers:GetWorldGradientMode()]
 				end
-					color = GradientStep(t,Lasers.select_gradient, Lasers.default_gradient_speed)
-					if color then 
-						laser:set_color( color )
-						return
-					end
-					nnl_log ("Failed to create color.")
+				
+				color = GradientStep(t,select_gradient, Lasers.default_gradient_speed)
+
+				if color then 
+					laser._brush:set_color( color )
 					return
+				end
+				
+				nnl_log ("Failed to create color.")
+				return
 			else
-				laser._brush:set_color(GradientStep(t, Lasers.rainbow, Lasers.default_gradient_speed) )
+				nnl_log("World Gradient is disabled. Using World Laser Color.")
+				laser._brush:set_color(Lasers:GetWorldLaserColor())
+				return
 			end
 		end)
 --end

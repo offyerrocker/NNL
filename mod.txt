@@ -3,7 +3,7 @@
 	"description" : "Custom laser colors, synced with other modded players",
 	"author" : "Offyerrocker",
 	"contact" : "offyerrocker",
-	"version" : "Stable 1.2",
+	"version" : "Stable 1.22",
 	"blt_version" : 2,
 	"color" : "255 0 0",
 	"image" : "nnl.png",
@@ -31,7 +31,7 @@
 	],
 	"updates" : [
 		{
-			"revision" : 5,
+			"revision" : 7,
 			"identifier" : "NNL"
 		}
 	]
