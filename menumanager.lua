@@ -113,69 +113,101 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 	end)
 	
 	Hooks:Add( "MenuManagerInitialize", "MenuManagerInitialize_NewNetworkedLasers", function(menu_manager)
-	
-		MenuCallbackHandler.callback_own_r_slider = function(self,item)
+		
+		MenuCallbackHandler.callback_nnl_networked_lasers_toggle = function(self,item)
+			local value = item:value() == 'on' and true or false -- == not value --"true" and true or false --"disabled"
+			Lasers.settings.networked_lasers = value
+			Lasers:Save()
+		end
+		
+		MenuCallbackHandler.callback_nnl_master_gradients_toggle = function(self,item)
+			local value = item:value() == 'on' and true or false -- == not value --"true" and true or false --"disabled"
+			Lasers.settings.enabled_gradients_master = value
+			Lasers:Save()
+		end
+			
+		MenuCallbackHandler.callback_nnl_team_lasers_display_multiplechoice = function(self,item)
+			Lasers.settings.display_team_lasers = tonumber(item:value())
+			Lasers:Save()
+		end
+
+		
+		MenuCallbackHandler.callback_nnl_own_gradient_multiplechoice = function(self,item)
+			Lasers.settings.own_gradients_mode = tonumber(item:value())
+			Lasers:Save()
+		end
+		MenuCallbackHandler.callback_nnl_own_r_slider = function(self,item)
 			Lasers.settings.own_red = item:value()
 			Lasers:Save()
 		end
 		
-		MenuCallbackHandler.callback_own_g_slider = function(self,item)
+		MenuCallbackHandler.callback_nnl_own_g_slider = function(self,item)
 			Lasers.settings.own_green = item:value()
 			Lasers:Save()
 		end
 	
-		MenuCallbackHandler.callback_own_b_slider = function(self,item)
+		MenuCallbackHandler.callback_nnl_own_b_slider = function(self,item)
 			Lasers.settings.own_blue = item:value()
 			Lasers:Save()
 		end
 		
-		MenuCallbackHandler.callback_own_a_slider = function(self,item)
+		MenuCallbackHandler.callback_nnl_own_a_slider = function(self,item)
 			Lasers.settings.own_alpha = item:value()
 			Lasers:Save()
 		end
 		
 		
+				
+		MenuCallbackHandler.callback_nnl_team_gradient_multiplechoice = function(self,item)
+			Lasers.settings.team_gradients_mode = tonumber(item:value())
+			Lasers:Save()
+		end		
 		
 		
-		MenuCallbackHandler.callback_team_r_slider = function(self,item)
+		MenuCallbackHandler.callback_nnl_team_r_slider = function(self,item)
 			Lasers.settings.team_red = item:value()
 			Lasers:Save()
 		end
 		
-		MenuCallbackHandler.callback_team_g_slider = function(self,item)
+		MenuCallbackHandler.callback_nnl_team_g_slider = function(self,item)
 			Lasers.settings.team_green = item:value()
 			Lasers:Save()
 		end
 		
-		MenuCallbackHandler.callback_team_b_slider = function(self,item)
+		MenuCallbackHandler.callback_nnl_team_b_slider = function(self,item)
 			Lasers.settings.team_blue = item:value()		
 			Lasers:Save()
 		end
 		
-		MenuCallbackHandler.callback_team_a_slider = function(self,item)
+		MenuCallbackHandler.callback_nnl_team_a_slider = function(self,item)
 			Lasers.settings.team_alpha = item:value()
 			Lasers:Save()
 		end
 
 		
+				
+		MenuCallbackHandler.callback_nnl_snpr_gradient_multiplechoice = function(self,item)
+			Lasers.settings.snpr_gradients_mode = tonumber(item:value())
+			Lasers:Save()
+		end
 		
 		
-		MenuCallbackHandler.callback_snpr_r_slider = function(self,item)
+		MenuCallbackHandler.callback_nnl_snpr_r_slider = function(self,item)
 			Lasers.settings.snpr_red = item:value()
 			Lasers:Save()
 		end
 		
-		MenuCallbackHandler.callback_snpr_g_slider = function(self,item)
+		MenuCallbackHandler.callback_nnl_snpr_g_slider = function(self,item)
 			Lasers.settings.snpr_green = item:value()
 			Lasers:Save()
 		end
 		
-		MenuCallbackHandler.callback_snpr_b_slider = function(self,item)
+		MenuCallbackHandler.callback_nnl_snpr_b_slider = function(self,item)
 			Lasers.settings.snpr_blue = item:value()
 			Lasers:Save()
 		end
 
-		MenuCallbackHandler.callback_snpr_a_slider = function(self,item)
+		MenuCallbackHandler.callback_nnl_snpr_a_slider = function(self,item)
 			Lasers.settings.snpr_alpha = item:value()
 			Lasers:Save()
 		end
@@ -183,23 +215,28 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 		
 		
 		
+		MenuCallbackHandler.callback_nnl_wl_gradient_multiplechoice = function(self,item)
+			Lasers.settings.wl_gradients_mode = tonumber(item:value())
+			Lasers:Save()
+		end
 		
-		MenuCallbackHandler.callback_wl_r_slider = function(self,item)
+		
+		MenuCallbackHandler.callback_nnl_wl_r_slider = function(self,item)
 			Lasers.settings.wl_red = item:value()
 			Lasers:Save()
 		end
 				
-		MenuCallbackHandler.callback_wl_g_slider = function(self,item)
+		MenuCallbackHandler.callback_nnl_wl_g_slider = function(self,item)
 			Lasers.settings.wl_green = item:value()
 			Lasers:Save()
 		end
 
-		MenuCallbackHandler.callback_wl_b_slider = function(self,item)
+		MenuCallbackHandler.callback_nnl_wl_b_slider = function(self,item)
 			Lasers.settings.wl_blue = item:value()
 			Lasers:Save()
 		end
 				
-		MenuCallbackHandler.callback_wl_a_slider = function(self,item)
+		MenuCallbackHandler.callback_nnl_wl_a_slider = function(self,item)
 			Lasers.settings.wl_alpha = item:value()
 			Lasers:Save()
 		end
@@ -207,22 +244,28 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 		
 		
 		
-		MenuCallbackHandler.callback_turr_att_r_slider = function(self,item)
+		MenuCallbackHandler.callback_nnl_turr_gradient_multiplechoice = function(self,item)
+			Lasers.settings.turr_gradients_mode = tonumber(item:value())
+			Lasers:Save()
+		end
+
+		
+		MenuCallbackHandler.callback_nnl_turr_att_r_slider = function(self,item)
 			Lasers.settings.turr_att_red = item:value()
 			Lasers:Save()
 		end
 				
-		MenuCallbackHandler.callback_turr_att_g_slider = function(self,item)
+		MenuCallbackHandler.callback_nnl_turr_att_g_slider = function(self,item)
 			Lasers.settings.turr_att_green = item:value()
 			Lasers:Save()
 		end
 
-		MenuCallbackHandler.callback_turr_att_b_slider = function(self,item)
+		MenuCallbackHandler.callback_nnl_turr_att_b_slider = function(self,item)
 			Lasers.settings.turr_att_blue = item:value()
 			Lasers:Save()
 		end
 				
-		MenuCallbackHandler.callback_turr_att_a_slider = function(self,item)
+		MenuCallbackHandler.callback_nnl_turr_att_a_slider = function(self,item)
 			Lasers.settings.turr_att_alpha = item:value()
 			Lasers:Save()
 		end
@@ -230,22 +273,22 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 		
 		
 		
-		MenuCallbackHandler.callback_turr_rld_r_slider = function(self,item)
+		MenuCallbackHandler.callback_nnl_turr_rld_r_slider = function(self,item)
 			Lasers.settings.turr_rld_red = item:value()
 			Lasers:Save()
 		end
 				
-		MenuCallbackHandler.callback_turr_rld_g_slider = function(self,item)
+		MenuCallbackHandler.callback_nnl_turr_rld_g_slider = function(self,item)
 			Lasers.settings.turr_rld_green = item:value()
 			Lasers:Save()
 		end
 
-		MenuCallbackHandler.callback_turr_rld_b_slider = function(self,item)
+		MenuCallbackHandler.callback_nnl_turr_rld_b_slider = function(self,item)
 			Lasers.settings.turr_rld_blue = item:value()
 			Lasers:Save()
 		end
 				
-		MenuCallbackHandler.callback_turr_rld_a_slider = function(self,item)
+		MenuCallbackHandler.callback_nnl_turr_rld_a_slider = function(self,item)
 			Lasers.settings.turr_rld_alpha = item:value()
 			Lasers:Save()
 		end
@@ -253,100 +296,28 @@ Lasers._data = Lasers._data or Lasers.settings or {}
 		
 		
 		
-		MenuCallbackHandler.callback_turr_ecm_r_slider = function(self,item)
+		MenuCallbackHandler.callback_nnl_turr_ecm_r_slider = function(self,item)
 			Lasers.settings.turr_ecm_red = item:value()
 			Lasers:Save()
 		end
 				
-		MenuCallbackHandler.callback_turr_ecm_g_slider = function(self,item)
+		MenuCallbackHandler.callback_nnl_turr_ecm_g_slider = function(self,item)
 			Lasers.settings.turr_ecm_green = item:value()
 			Lasers:Save()
 		end
 
-		MenuCallbackHandler.callback_turr_ecm_b_slider = function(self,item)
+		MenuCallbackHandler.callback_nnl_turr_ecm_b_slider = function(self,item)
 			Lasers.settings.turr_ecm_blue = item:value()
 			Lasers:Save()
 		end
 				
-		MenuCallbackHandler.callback_turr_ecm_a_slider = function(self,item)
+		MenuCallbackHandler.callback_nnl_turr_ecm_a_slider = function(self,item)
 			Lasers.settings.turr_ecm_alpha = item:value()
 			Lasers:Save()
 		end
 		
-		
-		MenuCallbackHandler.callback_own_gradient_multiplechoice = function(self,item)
-			Lasers.settings.own_gradients_mode = tonumber(item:value())
-			Lasers:Save()
-		end
-		
-		MenuCallbackHandler.callback_team_gradient_multiplechoice = function(self,item)
-			Lasers.settings.team_gradients_mode = tonumber(item:value())
-			Lasers:Save()
-		end		
-		
-		MenuCallbackHandler.callback_snpr_gradient_multiplechoice = function(self,item)
-			Lasers.settings.snpr_gradients_mode = tonumber(item:value())
-			Lasers:Save()
-		end
-		
-		MenuCallbackHandler.callback_wl_gradient_multiplechoice = function(self,item)
-			Lasers.settings.wl_gradients_mode = tonumber(item:value())
-			Lasers:Save()
-		end
-		
-		MenuCallbackHandler.callback_turr_gradient_multiplechoice = function(self,item)
-			Lasers.settings.turr_gradients_mode = tonumber(item:value())
-			Lasers:Save()
-		end
-		
 
-		MenuCallbackHandler.callback_team_lasers_display_multiplechoice = function(self,item)
-			Lasers.settings.display_team_lasers = tonumber(item:value())
-			Lasers:Save()
-		end
-		
-		MenuCallbackHandler.callback_networked_lasers_toggle = function(self,item)
-			local value = item:value() == 'on' and true or false -- == not value --"true" and true or false --"disabled"
-			Lasers.settings.networked_lasers = value
-			Lasers:Save()
-		end
-		
-		MenuCallbackHandler.callback_master_gradients_toggle = function(self,item)
-			local value = item:value() == 'on' and true or false -- == not value --"true" and true or false --"disabled"
-			Lasers.settings.enabled_gradients_master = value
-			Lasers:Save()
-		end
-		
-		MenuCallbackHandler.callback_own_gradients_toggle = function(self,item)
-			local value = item:value() == 'on' and true or false -- == not value --"true" and true or false --"disabled"
-			Lasers.settings.enabled_own_gradients = value
-			Lasers:Save()
-		end
-		
-		MenuCallbackHandler.callback_team_gradients_toggle = function(self,item)
-			local value = item:value() == 'on' and true or false -- == not value --"true" and true or false --"disabled"
-			Lasers.settings.enabled_team_gradients = value
-			Lasers:Save()
-		end
-		
-		MenuCallbackHandler.callback_sniper_gradients_toggle = function(self,item)
-			local value = item:value() == 'on' and true or false -- == not value --"true" and true or false --"disabled"
-			Lasers.settings.enabled_snpr_gradients = value
-			Lasers:Save()
-		end
-		
-		MenuCallbackHandler.callback_world_gradients_toggle = function(self,item)
-			local value = item:value() == 'on' and true or false -- == not value --"true" and true or false --"disabled"
-			Lasers.settings.enabled_wl_gradients = value
-			Lasers:Save()
-		end
-	
-		MenuCallbackHandler.callback_turret_gradients_toggle = function(self,item)
-			local value = item:value() == 'on' and true or false -- == not value --"true" and true or false --"disabled"
-			Lasers.settings.enabled_turr_gradients = value
-			Lasers:Save()
-		end
-		
+
 		MenuCallbackHandler.callback_nnl_close = function(this)
 			Lasers:Save()
 		end
