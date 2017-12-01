@@ -676,9 +676,9 @@ end
 			end
 			peerid_num = managers.criminals:character_peer_id_by_name( criminal_name )
 			criminal_username = LuaNetworking:GetNameFromPeerID( peerid_num ) or "Noone"
-			
-			if (Lasers:GetTeamLaserDisplayMode() == Lasers.last_peer_mode[peerid_num]) and not (Lasers.last_peer_mode[peerid_num] == "strobe") then
---				lp_log("No need to update peer lasers. Quitting UpdateLaser early")
+			if false then
+--			if (Lasers:GetTeamLaserDisplayMode() == Lasers.last_peer_mode[peerid_num]) and not (Lasers.last_peer_mode[peerid_num] == "strobe") then
+				lp_log("No need to update peer lasers. Quitting UpdateLaser early")
 				return
 			end
 			
@@ -701,9 +701,9 @@ end
 					end
 				end --this is pointedly not else-exclusive with the rest of the function
 				
-				if type(net_strobe) == "table" and Lasers:IsMasterLaserStrobeEnabled() then
-					lp_log("Using NPC player UpdateLaser() of id " .. "nil")
-					color = Lasers:StrobeStep(net_strobe,false)
+				if type(net_strobe) == "table" and Lasers:IsMasterLaserStrobeEnabled() and Lasers:IsTeamLaserStrobeEnabled() then
+					lp_log("Using NPC player UpdateLaser() of id " .. tostring(peerid_num))
+					color = Lasers:StrobeStep(net_strobe)
 					Lasers.last_peer_mode[peerid_num] = "strobe"
 					laser:set_color(color)
 					return
@@ -876,7 +876,7 @@ end
 			
 			if string.find(data, "l") then
 				lp_log("Successfully received and parsed data.")
-				col = StringToStrobeTable(data)
+				col = Lasers:init_strobe(StringToStrobeTable(data))
 			elseif data ~= "nil" then
 				lp_log("Did not find data.")
 				col = LuaNetworking:StringToColour(data)
