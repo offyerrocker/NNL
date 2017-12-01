@@ -262,72 +262,49 @@ function SpecialLaser(override_type,override_speed)
 	return color
 end
 
-
-function StringToStrobeTable(data)
-	local strobe_data = {
-		colors = {},
-		count = 0
-	}
-	local prefix = "l:"
-	local col_sep = "^"
-	local count_sep = "&"
-	
-	local split_strobe = string.split( data, prefix )
-	local colors = string.split( data[1], col_sep )
-	local count = string.split( data[2], count_sep )
-	
-	for k,v in ipairs(colors) do
---		lp_log(tostring(k) .. "," .. tostring(v))
-		strobe_data.colors[k] = LuaNetworking:StringToColour(v)
---		lp_log("Parsing string data k = [" .. tostring(k) .. "], v = [" .. tostring(v) .. "]")
---		lp_log("Parsing string data color_count = " .. tostring(count))
-	end
-	
-	strobe_data[color_count] = count
-	
-	return strobe_data
-end
-
 function StrobeTableToString(data)
-	local colors = data.colors
-	local color_count = data.color_count or 0
-	local c
-	local prefix = "l:"
-	local col_sep = "^"
-	local count_sep = "&"
-	local data_string = prefix
-	for k,v in ipairs(colors) do
---	lp_log("Parsing k/v in tabletostring" .. tostring(k) .. "," .. tostring(v))
---	lp_log("Parsing table data color_count = " .. tostring(color_count))	
-		c = LuaNetworking:ColourToString(v)
-		data_string = data_string .. c .. col_sep
-	end
-	data_string = data_string .. color_count .. count_sep
---	lp_log("New strobe string created, called [" .. data_string .."]")
-	return data_string
-end
+	if not type(data) == "table" then
+		return false
+	end --replace this with IsStrobeValid() ?
+		
+--	local colors = {}
+	local duration = data.duration or Lasers.default_max_colors		
+	local color_count = data.color_count or 1
 
-function IsStrobeValid(data)
-	local n = 0
-	if not type(data.color_count) == "number" then 
-		lp_log("Invalid strobe- color count is formatted incorrectly!")
+	local output = "l" .. duration
+	
+	for k,v in ipairs(data.colors) do
+		output = output .. "c" .. LuaNetworking:ColourToString(v)
+	end
+	return output
+end
+	
+	
+function StringToStrobeTable(data)
+	if not type(data) == "string" then 
 		return false
 	end
-
-	for k,v in ipairs(data.colors) do
-		n = n + 1
-		if not (type(v.red) == "number" and type(v.green) == "number" and type(v.blue) == "number" and type(v.alpha) == "number") then
-			lp_log("Invalid strobe- Color is formatted incorrectly!")
-			return false
+	
+	local output = {
+		colors = {},
+		duration = Lasers.default_max_colors,
+		color_count = 0
+	}
+	
+	local split_strobe = string.split(data, "c")
+	
+	output.duration = tonumber(split_strobe[1]) or output.duration
+	for k,v in ipairs(split_strobe) do
+		log("k/v = " .. tostring(k) .. "/" .. tostring(v))
+		if not k == 1 then
+			output.color_count = k-1
+			output.colors[output.color_count] = LuaNetworking:StringToColour(split_strobe[v])
 		end
 	end
---[[	
-	if n ~= data.color_count then 
-		lp_log("Malformed strobe- number of colors " .. tostring(n) .. " is different than color_count " .. tostring(data.color_count))
-	end
---]]
-end
 	
+end
+
+
 
 function Lasers:GetCriminalNameFromLaserUnit( laser )
 
@@ -897,7 +874,7 @@ end
 			local char = criminals_manager:character_name_by_peer_id(sender)
 			local col = data
 			
-			if string.find(data, "l:") then
+			if string.find(data, "l") then
 				lp_log("Successfully received and parsed data.")
 				col = StringToStrobeTable(data)
 			elseif data ~= "nil" then
