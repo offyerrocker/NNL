@@ -1,20 +1,20 @@
 {
-	"name" : "New Networked Lasers (BLT2)",
-	"description" : "Custom laser colors, synced with other modded players",
+	"name" : "Lasers Plus",
+	"description" : "Strobing Lasers and Custom NPC/Vault lasers",
 	"author" : "Offyerrocker",
 	"contact" : "offyerrocker",
-	"version" : "Stable 1.22",
+	"version" : "Alpha 0.01",
 	"blt_version" : 2,
-	"color" : "255 0 0",
+	"color" : "255 128 0",
 	"image" : "nnl.png",
 	"hooks" : [
 		{
-			"hook_id" : "lib/managers/menumanager",
-			"script_path" : "menumanager.lua"
+			"hook_id" : "lib/managers/mission/elementlasertrigger",
+			"script_path" : "worldlasers.lua"
 		},
 		{
 			"hook_id" : "lib/units/weapons/weaponlaser",
-			"script_path" : "nnl.lua"
+			"script_path" : "lasers.lua"
 		},
 		{
 			"hook_id" : "lib/units/weapons/weaponlaser",
@@ -22,17 +22,15 @@
 		},
 		{
 			"hook_id" : "lib/units/weapons/raycastweaponbase",
-			"script_path" : "nnl.lua"
+			"script_path" : "lasers.lua"
 		},
 		{
-			"hook_id" : "lib/managers/mission/elementlasertrigger",
-			"script_path" : "nnl.lua"
-		}
-	],
-	"updates" : [
+			"hook_id" : "lib/managers/menumanager",
+			"script_path" : "menumanager.lua"
+		},
 		{
-			"revision" : 7,
-			"identifier" : "NNL"
+			"hook_id" : "lib/units/weapons/weaponflashlight",
+			"script_path" : "flashlights.lua"
 		}
 	]
 }

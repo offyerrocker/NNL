@@ -1,8 +1,8 @@
 {
-	"menu_id" : "lasersplus_options",
-	"parent_menu_id" : "blt_options",
-	"title" : "lasersplus_title",
-	"back_callback" : "callback_lp_close",
+	"menu_id" : "lp_lasers_options",
+	"parent_menu_id" : "lasersplus_options",
+	"title" : "lp_lasers_title",
+	"back_callback" : "lp_lasers_callback_close",
 	"items" : [
 		{
 			"type" : "toggle",
@@ -14,11 +14,11 @@
 		},
 		{ 
 			"type" : "toggle",
-			"id" : "lp_laser_strobes_toggle",
-			"title" : "lp_laser_strobes_toggle_title",
-			"description" : "lp_laser_strobes_toggle_desc",
-			"callback" : "callback_lp_laser_strobes_enabled_toggle",
-			"value" : "enabled_laser_strobes_master"
+			"id" : "lp_flashlight_strobes_toggle",
+			"title" : "lp_flashlight_strobes_toggle_title",
+			"description" : "lp_flashlight_strobes_toggle_desc",
+			"callback" : "callback_lp_flashlight_strobes_enabled_toggle",
+			"value" : "enabled_flashlight_strobes_master"
 		},
 		{
 			"type" : "toggle",
@@ -253,7 +253,8 @@
 			"items" : [
 				"team_flashlight_display_mode_a",
 				"team_flashlight_display_mode_b",
-				"team_flashlight_display_mode_c"
+				"team_flashlight_display_mode_c",
+				"team_flashlight_display_mode_d"
 			],
 			"value" : "team_flashlight_display_mode"
 		},		
