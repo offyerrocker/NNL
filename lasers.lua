@@ -670,7 +670,7 @@ end
 				Lasers.last_mode["cop_sniper"] = "strobe"
 			end
 			if (Lasers.last_mode["cop_sniper"] == Lasers:GetSniperDisplayMode()) and not (Lasers:GetSniperDisplayMode() == "strobe") then
-				lp_log("No need to update sniper lasers. Quitting UpdateLaser early")
+--				lp_log("No need to update sniper lasers. Quitting UpdateLaser early")
 				return
 			end
 			if laser:theme_type() == "cop_sniper" then
@@ -701,7 +701,7 @@ end
 			criminal_username = LuaNetworking:GetNameFromPeerID( peerid_num ) or "Noone"
 			
 			if (Lasers:GetTeamLaserDisplayMode() == Lasers.last_peer_mode[peerid_num]) and not (Lasers.last_peer_mode[peerid_num] == "strobe") then
-				lp_log("No need to update peer lasers. Quitting UpdateLaser early")
+--				lp_log("No need to update peer lasers. Quitting UpdateLaser early")
 				return
 			end
 			
@@ -779,9 +779,9 @@ end
 			end--]]
 --			log("Display Mode: " .. tostring(Lasers:GetOwnLaserDisplayMode()))
 			if (Lasers.last_mode["self"] == Lasers:GetOwnLaserDisplayMode()) and Lasers:GetOwnLaserDisplayMode() ~= "strobe" then
-				lp_log("Playermode is " .. tostring(Lasers:GetOwnLaserDisplayMode()))
-				lp_log("player strobe is " .. tostring(Lasers:IsOwnLaserStrobeEnabled()))
-				lp_log("master strobe is " .. tostring(Lasers:IsMasterLaserStrobeEnabled()))
+--				lp_log("Playermode is " .. tostring(Lasers:GetOwnLaserDisplayMode()))
+--				lp_log("player strobe is " .. tostring(Lasers:IsOwnLaserStrobeEnabled()))
+--				lp_log("master strobe is " .. tostring(Lasers:IsMasterLaserStrobeEnabled()))
 				return
 			end
 			if Lasers:IsOwnLaserInvisible() then
@@ -827,15 +827,14 @@ end
 		Lasers:UpdateLaser(laser, unit, 0, 0)
 		-- *****    Send Data    *****
 --		if Lasers:IsMasterLaserStrobeEnabled() and Lasers:IsOwnLaserStrobeEnabled() then
-		local strobe_string = StrobeTableToString(Lasers.own_laser_strobe)
-		lp_log("Completed table to string conversion. Result: " .. strobe_string)
+--		local strobe_string = StrobeTableToString(Lasers.own_laser_strobe)
+--		lp_log("Completed table to string conversion. Result: " .. strobe_string)
 --		end
 		
-		if Lasers:IsNetworkingEnabled() then
-			if strobe_string then
-				LuaNetworking:SendToPeers( Lasers.LuaNetID, strobe_string)
-			end
-		end
+--		if Lasers:IsNetworkingEnabled() then
+--			LuaNetworking:SendToPeers( Lasers.LuaNetID, LuaNetworking:ColourToString(Lasers:GetOwnLaserColor()))
+--			LuaNetworking:SendToPeers( Lasers.LuaNetID, strobe_string)
+--		end
 		
 	end)
 
@@ -843,11 +842,11 @@ end
 
 	-- *****    Set On    *****
 	Hooks:Add("WeaponLaserSetOn", "WeaponLaserSetOn_", function(laser)
-	
+		LuaNetworking:SendToPeers( Lasers.LuaNetID, LuaNetworking:ColourToString(Lasers:GetOwnLaserColor()))
+		LuaNetworking:SendToPeers( Lasers.LuaNetID, Lasers:GetSavedPlayerStrobe())
 		if laser._is_npc or not Lasers:IsNetworkingEnabled() then
 			return
 		end
-
 		local criminals_manager = managers.criminals
 		if not criminals_manager then
 			return
@@ -856,7 +855,7 @@ end
 		local local_name = criminals_manager:local_character_name()
 		local laser_name = Lasers:GetCriminalNameFromLaserUnit(laser)
 		if laser_name == nil or local_name == laser_name then
-			LuaNetworking:SendToPeers( Lasers.LuaNetID, LuaNetworking:ColourToString(Lasers:GetOwnLaserColor()))
+			return
 		end
 	end)
 			--[[
@@ -900,7 +899,7 @@ end
 			
 			if string.find(data, "l:") then
 				lp_log("Successfully received and parsed data.")
-				col = Lasers:StringToStrobeTable(data)
+				col = StringToStrobeTable(data)
 			elseif data ~= "nil" then
 				lp_log("Did not find data.")
 				col = LuaNetworking:StringToColour(data)

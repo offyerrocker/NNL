@@ -152,6 +152,13 @@ function Lasers:GetOwnLaserStrobe()
 	return Lasers._own_laser_strobe
 end
 
+function Lasers:GetSavedPlayerStrobe()
+	if not (Lasers.settings.saved_strobe and type(Lasers.settings.saved_strobe) == "string") then 
+		Lasers.settings.saved_strobe = StrobeTableToString(Lasers.own_laser_strobe)
+	end
+	return Lasers.settings.saved_strobe
+end
+
 --generic team strobe if you choose to override your teammates' lasers to a custom strobe
 function Lasers:GetTeamLaserStrobe()
 	if not Lasers._team_laser_strobe then
@@ -383,13 +390,14 @@ end
 		end
 	end
 --]]
-function Lasers:Load()	
+function Lasers:Load()
 	local file = io.open(self._data_path, "r")
 	if (file) then
 		for k, v in pairs(json.decode(file:read("*all"))) do
 			self.settings[k] = v
 		end
 	end
+	Lasers.settings.saved_strobe = StrobeTableToString(Lasers.own_laser_strobe)
 end
 
 function Lasers:Save()
@@ -449,7 +457,6 @@ Hooks:Add( "MenuManagerInitialize", "MenuManagerInitialize_LasersPlus", function
 			Lasers.settings.own_laser_alpha = item:value()
 			Lasers:Save()
 		end
-		
 		
 	MenuCallbackHandler.callback_lp_own_flashlight_strobe_enabled_toggle = function(self,item)
 		local value = item:value() == 'on' and true or false
@@ -554,7 +561,6 @@ Hooks:Add( "MenuManagerInitialize", "MenuManagerInitialize_LasersPlus", function
 			Lasers.settings.wl_alpha = item:value()
 			Lasers:Save()
 		end
-		
 
 	MenuCallbackHandler.callback_lp_sniper_display_mode_multiplechoice = function(self,item)
 		Lasers.settings.sniper_display_mode = tonumber(item:value())
@@ -581,10 +587,7 @@ Hooks:Add( "MenuManagerInitialize", "MenuManagerInitialize_LasersPlus", function
 			Lasers.settings.snpr_alpha = item:value()
 			Lasers:Save()
 		end
-			
-	
-	
-	
+
 	MenuCallbackHandler.callback_lp_turret_display_mode_multiplechoice = function(self,item)
 		Lasers.settings.turret_display_mode = tonumber(item:value())
 		Lasers:Save()
