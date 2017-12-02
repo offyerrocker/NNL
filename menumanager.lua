@@ -154,7 +154,7 @@ end
 
 function Lasers:GetSavedPlayerStrobe()
 	if not (Lasers.settings.saved_strobe and type(Lasers.settings.saved_strobe) == "string") then 
-		Lasers.settings.saved_strobe = StrobeTableToString(Lasers.own_laser_strobe)
+		Lasers.settings.saved_strobe = Lasers:StrobeTableToString(Lasers.own_laser_strobe)
 	end
 	return Lasers.settings.saved_strobe
 end
@@ -236,7 +236,7 @@ function Lasers:IsEnabled()
 end
 
 function Lasers:IsNetworkingEnabled()
-	return Lasers.enabled_networking
+	return Lasers.settings.enabled_networking
 end
 
 function Lasers:IsMasterLaserStrobeEnabled()
@@ -397,7 +397,7 @@ function Lasers:Load()
 			self.settings[k] = v
 		end
 	end
-	Lasers.settings.saved_strobe = StrobeTableToString(Lasers.own_laser_strobe)
+	Lasers.settings.saved_strobe = Lasers:StrobeTableToString(Lasers.own_laser_strobe)
 end
 
 function Lasers:Save()

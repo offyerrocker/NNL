@@ -25,6 +25,7 @@ Lasers.last_turret_mode = "none"
 Lasers.last_sniper_mode = "none"
 --can be any turret theme_type
 
+Lasers.SavedTeamStrobes = Lasers.SavedTeamStrobes or {}
 Lasers.SavedTeamColors = Lasers.SavedTeamColors or {}
 Lasers.SavedTeamFlashlights = Lasers.SavedTeamFlashlights or {}
 --[[
@@ -262,7 +263,7 @@ function SpecialLaser(override_type,override_speed)
 	return color
 end
 
-function StrobeTableToString(data)
+function Lasers:StrobeTableToString(data)
 	if not type(data) == "table" then
 		return false
 	end --replace this with IsStrobeValid() ?
@@ -276,13 +277,15 @@ function StrobeTableToString(data)
 	for k,v in ipairs(data.colors) do
 		output = output .. "c" .. LuaNetworking:ColourToString(v)
 	end
+	
 	return output
 end
 	
 	
-function StringToStrobeTable(data)
+function Lasers:StringToStrobeTable(data)
 	if not type(data) == "string" then 
-		return false
+		lp_log("Error! Item to convert to table is not a string!")
+		return
 	end
 	
 	local output = {
@@ -293,15 +296,21 @@ function StringToStrobeTable(data)
 	
 	local split_strobe = string.split(data, "c")
 	
+--	lp_log("StringToStrobeTable: logging split_strobe")
+--	recursive_table_log(split_strobe)
+	
 	output.duration = tonumber(split_strobe[1]) or output.duration
 	for k,v in ipairs(split_strobe) do
-		log("k/v = " .. tostring(k) .. "/" .. tostring(v))
+		lp_log("k = [" .. tostring(k) .. "], v = [" .. tostring(v) .. "]")
 		if not k == 1 then
 			output.color_count = k-1
 			output.colors[output.color_count] = LuaNetworking:StringToColour(split_strobe[v])
 		end
 	end
-	
+
+	lp_log("Logging output StringToStrobeTable")
+	recursive_table_log(output)	
+	return output
 end
 
 
@@ -329,8 +338,8 @@ function Lasers:GetCriminalNameFromLaserUnit( laser )
 		if alive(character.unit) and character.unit:inventory() and character.unit:inventory():equipped_unit() then
 
 			local weapon_base = character.unit:inventory():equipped_unit():base()
-			lp_log("Starting Recursive Log.")
-			recursive_table_log(weapon_base)
+--			lp_log("Starting Recursive Log.")
+--			recursive_table_log(weapon_base)
 			if Lasers:CheckWeaponForLasers( weapon_base, laser_key ) then
 				self._laser_units_lookup[laser_key] = character.name
 				return
@@ -684,20 +693,26 @@ end
 			
 			if Lasers.last_peer_mode[peerid_num] == "none" then 
 				lp_log("Initiating Strobe for player id " .. tostring(peerid_num))
-				Lasers.peer_strobe[peerid_num] = Lasers:init_strobe(Lasers.default_strobe,false)
+				Lasers.peer_strobe[peerid_num] = Lasers:init_strobe(Lasers.default_strobe)
 				Lasers.last_peer_mode[peerid_num] = "strobe"
 			end			
 			
-			local net_strobe = Lasers.SavedTeamColors[criminal_name]
-
+			local net_strobe = Lasers.SavedTeamStrobes[criminal_name] or Lasers.SavedTeamColors[criminal_name]
+			--todo: log contents of net strobe
+			if not net_strobe then 
+				lp_log("no saved table for criminal " .. tostring(criminal_name))
+			end
 			if Lasers:IsNetworkingEnabled() and net_strobe then
+				lp_log("Entering team network loop")
+				
 				if type(net_strobe) == "string" then
+					lp_log("Found net_strobe is string")
 					color = SpecialLaser(net_strobe,false)
 					if color then 
 						laser:set_color(color)
 						return
 					else 
---						lp_log("String parse failed for type " .. color)
+						lp_log("String parse failed for type " .. color)
 					end
 				end --this is pointedly not else-exclusive with the rest of the function
 				
@@ -707,16 +722,20 @@ end
 					Lasers.last_peer_mode[peerid_num] = "strobe"
 					laser:set_color(color)
 					return
-					
 				--legacy color support if you still have old nnl for some reason, i guess
 				elseif not (type(net_strobe) == "table") then
+					lp_log("Type of netstrobe is not a table")
 					--assume it's type color, since networking input would filter out other types
 					color = net_strobe
 					Lasers.last_peer_mode[peerid_num] = "color"
 					laser:set_color(color)
 					return
+				else
+					lp_log("Failed update to strobestep check and update to networked laser check. Check data type(net_strobe) ?")
+					recursive_table_log(net_strobe)
 				end
 			else
+				lp_log("No viable networked settings found. Entering local custom team laser override loop.")
 			--override or if no netcolor found
 				if Lasers:IsTeamLaserPeerColor() then
 						Lasers.last_peer_mode[peerid_num] = "peer"
@@ -819,8 +838,16 @@ end
 
 	-- *****    Set On    *****
 	Hooks:Add("WeaponLaserSetOn", "WeaponLaserSetOn_", function(laser)
+		local own_strobe = Lasers:GetSavedPlayerStrobe() 
 		LuaNetworking:SendToPeers( Lasers.LuaNetID, LuaNetworking:ColourToString(Lasers:GetOwnLaserColor()))
-		LuaNetworking:SendToPeers( Lasers.LuaNetID, Lasers:GetSavedPlayerStrobe())
+		LuaNetworking:SendToPeers( Lasers.LuaNetID, own_strobe)
+		lp_log("Starting recursive log in laser set on of compressed string strobe, of data type " .. type(own_strobe))
+		local c_t = Lasers:StringToStrobeTable(own_strobe)
+		lp_log("after conversion, is now " .. type(c_t))
+		
+		
+		--		recursive_table_log(Lasers:StringtoStrobeTable(Lasers:GetSavedPlayerStrobe()))
+--[[
 		if laser._is_npc or not Lasers:IsNetworkingEnabled() then
 			return
 		end
@@ -834,23 +861,8 @@ end
 		if laser_name == nil or local_name == laser_name then
 			return
 		end
+		--]]
 	end)
-			--[[
-			if Lasers:GetOwnLaserDisplayMode() == 3 then -- Lasers:IsRainbow() then
-				col_str = "rainbow" --to be tested
-			end
-			local strobe_string = false
-			
-			if Lasers:IsMasterLaserStrobeEnabled() and Lasers:IsOwnLaserStrobeEnabled() then
-				strobe_string = StrobeTableToString(Lasers.default_strobe)
-				lp_log("Completed table to string conversion. Result: " .. strobe_string)
-			end
-			
-			if Lasers:IsNetworkingEnabled() then
-				if strobe_string then
-					LuaNetworking:SendToPeers( Lasers.LuaNetID, strobe_string)
-				end
-			end --]]
 	
 	
 	-- *****    Receive Data    *****
@@ -875,15 +887,23 @@ end
 			local col = data
 			
 			if string.find(data, "l") then
-				lp_log("Successfully received and parsed data.")
-				col = Lasers:init_strobe(StringToStrobeTable(data))
+				lp_log("Successfully received and parsed strobe data.")
+				col = Lasers:init_strobe(Lasers:StringToStrobeTable(data))
+				if char then
+					Lasers.SavedTeamStrobes[char] = col
+					lp_log("Saved a team strobe to the table")
+					return
+				end
 			elseif data ~= "nil" then
 				lp_log("Did not find data.")
 				col = LuaNetworking:StringToColour(data)
+				return
 			end
 			
 			if char then
 				Lasers.SavedTeamColors[char] = col
+				lp_log("received from char " .. tostring(char))
+				return
 			end
 		end
 
