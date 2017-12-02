@@ -794,6 +794,12 @@ end
 			if Lasers:IsOwnLaserCustom() then
 				if Lasers:IsOwnLaserStrobeEnabled() and Lasers:IsMasterLaserStrobeEnabled() then
 --					lp_log("Doing strobe calc")
+--					if not Lasers.derp then
+--						Lasers.derp = true
+--						Lasers.foo = Lasers:init_strobe(Lasers:StringToStrobeTable((Lasers:GetSavedPlayerStrobe())))
+--						return
+--					end
+--					color = Lasers:StrobeStep(Lasers.foo)
 					color = Lasers:StrobeStep(Lasers:GetOwnLaserStrobe(),false)
 				else
 --					lp_log("Doing own laser solid color")
