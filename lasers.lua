@@ -152,12 +152,12 @@ function Lasers:init_strobe(des_table,max_colors_override)
 --		lp_log("Generating strobe: h1/h2 = " .. tostring(h1) .. "/" .. tostring(h2))
 		col_1 = input_strobe.colors[h1]
 		col_2 = input_strobe.colors[h2]
-		lp_log("init_strobe: types of col_1 and col_2 are " .. type(col_1) .. type(col_2))
+--		lp_log("init_strobe: types of col_1 and col_2 are " .. type(col_1) .. type(col_2))
 --		lp_log("Generating strobe. color1 = " .. LuaNetworking:ColourToString(col_1) .. ", color2 = " .. LuaNetworking:ColourToString(col_2))
 
 --		lp_log("Init strobe 1: " .. LuaNetworking:ColourToString(col_1))
 --		lp_log("Init strobe 2: " .. LuaNetworking:ColourToString(col_2))
-		if not col_1 or not col_1.red then
+		if not (col_1 and col_2 and col_1.red and col_2.red) then
 			lp_log("init: invalid colors. returning...")
 			return des_table
 		end
@@ -463,13 +463,12 @@ Lasers.default_strobe = {
 lp_log("Initiating strobe from mod...")
 Lasers.own_laser_strobe = Lasers.own_laser_strobe or {
 	colors = {
-		[1] = Color(1,0,0):with_alpha(0.7),
-		[2] = Color(0,0,1):with_alpha(0.7),
-		[3] = Color(1,0,0):with_alpha(0.7),
-		[4] = Color(0,0,1):with_alpha(0.7)
+		[1] = Color(1,0,0):with_alpha(0.3),
+		[2] = Color(0,1,0):with_alpha(0.3),
+		[3] = Color(0,0,1):with_alpha(0.3)
 	},
-	duration = 20,
-	color_count = 4
+	duration = 30,
+	color_count = 3
 }
 Lasers.own_flashlight_strobe = Lasers.own_flashlight_strobe or {
 	colors = {
@@ -800,6 +799,8 @@ end
 				return
 			end
 			if Lasers.last_peer_mode[peerid_num] == "strobe" then
+--				color = Lasers:StrobeStep(net_strobe)
+--				laser:set_color(color)
 				lp_log("CAUSE THIS IS FILLER, FILLER NIGHT")
 			end
 			lp_log("Reached the end of team lasers loop. Something went wrong!")
@@ -869,7 +870,7 @@ end
 
 	Hooks:Add("WeaponLaserInit", "WeaponLaserInit_", function(laser, unit)
 		lp_log("Generating player strobe in Init.")
-		Lasers._own_laser_strobe = Lasers:init_strobe(Lasers.own_laser_strobe,false)	
+		Lasers:GetOwnLaserStrobe()--Lasers:init_strobe(Lasers.own_laser_strobe)	
 		Lasers:UpdateLaser(laser, unit, 0, 0)
 		-- *****    Send Data    *****
 --		if Lasers:IsMasterLaserStrobeEnabled() and Lasers:IsOwnLaserStrobeEnabled() then
@@ -942,9 +943,10 @@ end
 			if string.find(data, "l") then
 --				lp_log("Successfully received and parsed strobe data.")
 				lp_log("Received data: " .. "data: " .. type(data))
-				col = Lasers:init_strobe(Lasers:StringToStrobeTable(data))
-				if char then
-					Lasers.SavedTeamStrobes[char] = Lasers.SavedTeamStrobes[char] or col
+				if char and not Lasers.SavedTeamStrobes[char] then
+					col = Lasers:init_strobe(Lasers:StringToStrobeTable(data))
+--					Lasers.SavedTeamStrobes[char] = Lasers.SavedTeamStrobes[char] or col
+					Lasers.SavedTeamStrobes[char] = col
 					lp_log("Saved a team strobe to the table")
 					return
 				end

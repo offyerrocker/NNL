@@ -327,7 +327,7 @@ function Lasers:IsTeamLaserPeerColor()
 end
 
 function Lasers:IsTeamLaserStrobeEnabled()
-	return Lasers.settings.team_strobe_enabled
+	return Lasers.settings.team_laser_strobe_enabled
 end
 function Lasers:IsWorldStrobeEnabled()
 	return Lasers.settings.world_strobe_enabled
