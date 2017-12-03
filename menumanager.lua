@@ -390,6 +390,8 @@ end
 		end
 	end
 --]]
+
+
 function Lasers:Load()
 	local file = io.open(self._data_path, "r")
 	if (file) then

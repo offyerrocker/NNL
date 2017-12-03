@@ -99,6 +99,7 @@ since there is now no conflict between strobe_table.color_count and settings.max
 --the maximum number of colors should be kept in mind when creating desired gradients,
 --as creating an ultra-complex gradient with many colors will run poorly, display beautifully, and send poorly
 function Lasers:init_strobe(des_table,max_colors_override)
+	lp_log("init_strobe: type des_table is " .. type(des_table))
 --	local input_strobe = (IsStrobeValid(des_table) and des_table) or Lasers.default_strobe
 	local input_strobe = des_table or Lasers.default_strobe
 --	lp_log("--------------------------------------------------------------------------------------------")
@@ -151,8 +152,15 @@ function Lasers:init_strobe(des_table,max_colors_override)
 --		lp_log("Generating strobe: h1/h2 = " .. tostring(h1) .. "/" .. tostring(h2))
 		col_1 = input_strobe.colors[h1]
 		col_2 = input_strobe.colors[h2]
+		lp_log("init_strobe: types of col_1 and col_2 are " .. type(col_1) .. type(col_2))
 --		lp_log("Generating strobe. color1 = " .. LuaNetworking:ColourToString(col_1) .. ", color2 = " .. LuaNetworking:ColourToString(col_2))
 
+--		lp_log("Init strobe 1: " .. LuaNetworking:ColourToString(col_1))
+--		lp_log("Init strobe 2: " .. LuaNetworking:ColourToString(col_2))
+		if not col_1 or not col_1.red then
+			lp_log("init: invalid colors. returning...")
+			return des_table
+		end
 		r_diff = col_2.red - col_1.red
 		g_diff = col_2.green - col_1.green
 		b_diff = col_2.blue - col_1.blue
@@ -265,7 +273,8 @@ end
 
 function Lasers:StrobeTableToString(data)
 	if not type(data) == "table" then
-		return false
+		lp_log("Invalid table data!")
+		return
 	end --replace this with IsStrobeValid() ?
 		
 --	local colors = {}
@@ -283,33 +292,61 @@ end
 	
 	
 function Lasers:StringToStrobeTable(data)
+--[[
 	if not type(data) == "string" then 
 		lp_log("Error! Item to convert to table is not a string!")
 		return
 	end
-	
+	--]]
+	lp_log("StringToStrobeTable: Input Data Type is " .. type(data))
 	local output = {
 		colors = {},
 		duration = Lasers.default_max_colors,
 		color_count = 0
 	}
-	
+	lp_log("Dissolving string named " .. tostring(data))
 	local split_strobe = string.split(data, "c")
-	
 --	lp_log("StringToStrobeTable: logging split_strobe")
 --	recursive_table_log(split_strobe)
 	
+	lp_log("Splitting strobe of type " .. type(split_strobe) .. " Contents are:")	
 	output.duration = tonumber(split_strobe[1]) or output.duration
 	for k,v in ipairs(split_strobe) do
-		lp_log("k = [" .. tostring(k) .. "], v = [" .. tostring(v) .. "]")
-		if not k == 1 then
+		if not v then
+			lp_log("Found invalid character in split string! Skipping...")
+		elseif k == 1 then
+			log("Skipping first key.")
+		elseif v then
 			output.color_count = k-1
-			output.colors[output.color_count] = LuaNetworking:StringToColour(split_strobe[v])
+			log("Adding another color to the new strobe table for key " .. tostring(k))
+			log("type of value is " .. type(v))
+			output.colors[output.color_count] = LuaNetworking:StringToColour(v)
+		else
+			log("Didn't find another color to add t othe new strobe table...")
 		end
+		lp_log("k = [" .. tostring(k) .. "], v = [" .. tostring(v) .. "]")
 	end
 
-	lp_log("Logging output StringToStrobeTable")
-	recursive_table_log(output)	
+	lp_log("Logging output StringtoStrobeTable")
+	
+	
+	for k,v in pairs(output.colors) do
+		log("Color #" .. tostring(k))
+		log(LuaNetworking:ColourToString(v))
+	end
+	lp_log("Logged output stringtostrobetable")
+	--[[
+	for k,v in pairs(output) do
+		if type(k) == "table" then
+			for j, m in pairs (k) do
+				log("Subtable colors: " .. LuaNetworking:ColourToString(v))
+			end
+		else
+			log(tostring(v))
+		end
+	end--]]
+--	lp_log("Logging output StringToStrobeTable")
+--	recursive_table_log(output)	
 	return output
 end
 
@@ -426,12 +463,13 @@ Lasers.default_strobe = {
 lp_log("Initiating strobe from mod...")
 Lasers.own_laser_strobe = Lasers.own_laser_strobe or {
 	colors = {
-		[1] = Color(0,0,1):with_alpha(0.7),
-		[2] = Color(0,1,1):with_alpha(0.7),
-		[3] = Color(0,1,0):with_alpha(0.7)
+		[1] = Color(1,0,0):with_alpha(0.7),
+		[2] = Color(0,0,1):with_alpha(0.7),
+		[3] = Color(1,0,0):with_alpha(0.7),
+		[4] = Color(0,0,1):with_alpha(0.7)
 	},
-	duration = 30,
-	color_count = 3
+	duration = 20,
+	color_count = 4
 }
 Lasers.own_flashlight_strobe = Lasers.own_flashlight_strobe or {
 	colors = {
@@ -712,7 +750,7 @@ end
 						laser:set_color(color)
 						return
 					else 
-						lp_log("String parse failed for type " .. color)
+						lp_log("String parse failed for type " .. type(color))
 					end
 				end --this is pointedly not else-exclusive with the rest of the function
 				
@@ -793,13 +831,19 @@ end
 			end			
 			if Lasers:IsOwnLaserCustom() then
 				if Lasers:IsOwnLaserStrobeEnabled() and Lasers:IsMasterLaserStrobeEnabled() then
---					lp_log("Doing strobe calc")
---					if not Lasers.derp then
---						Lasers.derp = true
---						Lasers.foo = Lasers:init_strobe(Lasers:StringToStrobeTable((Lasers:GetSavedPlayerStrobe())))
---						return
---					end
---					color = Lasers:StrobeStep(Lasers.foo)
+--[[					lp_log("Doing strobe calc")
+					if not Lasers.foo then
+						lp_log("String version of compressed strobe is: " .. Lasers:StrobeTableToString(Lasers:GetOwnLaserStrobe()))
+						Lasers.foo = Lasers:init_strobe(Lasers:StringToStrobeTable(Lasers:GetSavedPlayerStrobe()))
+--						Lasers.foo = Lasers:init_strobe(Lasers:StringToStrobeTable("l20cr:1|g:0|b:0|a:0.7cr:0|g:0|b:1|a:0.7c"))
+						return
+					end
+--					lp_log("Setting color to strobe") 
+					color = Lasers:StrobeStep(Lasers.foo)
+--					lp_log("Setting color to " .. LuaNetworking:ColourToString(color))
+--]]
+
+
 					color = Lasers:StrobeStep(Lasers:GetOwnLaserStrobe(),false)
 				else
 --					lp_log("Doing own laser solid color")
@@ -848,8 +892,8 @@ end
 		LuaNetworking:SendToPeers( Lasers.LuaNetID, LuaNetworking:ColourToString(Lasers:GetOwnLaserColor()))
 		LuaNetworking:SendToPeers( Lasers.LuaNetID, own_strobe)
 		lp_log("Starting recursive log in laser set on of compressed string strobe, of data type " .. type(own_strobe))
-		local c_t = Lasers:StringToStrobeTable(own_strobe)
-		lp_log("after conversion, is now " .. type(c_t))
+--		local c_t = Lasers:StringToStrobeTable(own_strobe)
+--		lp_log("after conversion, is now " .. type(c_t))
 		
 		
 		--		recursive_table_log(Lasers:StringtoStrobeTable(Lasers:GetSavedPlayerStrobe()))
@@ -891,12 +935,16 @@ end
 
 			local char = criminals_manager:character_name_by_peer_id(sender)
 			local col = data
-			
+			if not data then
+				lp_log("Data is nil!")
+				return
+			end
 			if string.find(data, "l") then
-				lp_log("Successfully received and parsed strobe data.")
+--				lp_log("Successfully received and parsed strobe data.")
+				lp_log("Received data: " .. "data: " .. type(data))
 				col = Lasers:init_strobe(Lasers:StringToStrobeTable(data))
 				if char then
-					Lasers.SavedTeamStrobes[char] = col
+					Lasers.SavedTeamStrobes[char] = Lasers.SavedTeamStrobes[char] or col
 					lp_log("Saved a team strobe to the table")
 					return
 				end
